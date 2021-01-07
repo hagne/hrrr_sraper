@@ -16,7 +16,9 @@ setup(
     license="MIT",
     url="https://github.com/hagne/hrrr_sraper",
     # install_requires=['pandas', 'numpy', 'xarray'],
-    scripts=['scripts/scrape_hrrr_smoke'],
+    scripts=['scripts/scrape_hrrr', 
+             # 'scripts/hrrr_smoke2gml'
+             ],
     # entry_points = {'console_scripts': ['qcrad2ncei=SurfRadPy.NCEI:qcrad2ncei'],},
     # package_data={'': ['*.cdl']},
     # include_package_data=True,

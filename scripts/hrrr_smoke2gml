@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Nov 14 15:45:24 2020
+
+@author: hagen
+"""
+
+
+# from hrrr_scraper import scrapelab
+import traceback
+import sys
+import pandas as pd
+import datetime
+
+from hrrr_scraper import grid2site
+import atmPy.data_archives.noaa_gml
+from atmPy.general import measurement_site as ms
+
+
+### execute the program
+messages = ['run started {}\n========='.format(pd.Timestamp(datetime.datetime.now()))]
+errors = []
+try:
+    
+    gml_sites = atmPy.data_archives.noaa_gml.get_all_sites()
+    # extra from Betsy
+    gml_sites.add_station(ms.Station(abbreviation= 'GBN',name = 'Great Basin NP', state='NV', lat=39.005147, lon= -114.215994, alt = 2061))
+    gml_sites.add_station(ms.Station(abbreviation= 'AUS',name = 'Austin', state = 'NV', lat= 39.503006, lon= -117.081512, alt =  1915))
+    gml_sites.add_station(ms.Station(abbreviation= 'WMS',name = 'White Mtn Summit', state = 'CA', lat=37.634093, lon=-118.255688, alt=4343))
+    gml_sites.add_station(ms.Station(abbreviation= 'BCO',name = 'Barcroft Obs', state = 'CA', lat=37.58925, lon=-118.238703, alt=3889))
+    
+    # out = scrapelab.scrape_hrrr_smoke_from_ftp(messages = messages)
+    out = grid2site.project_grid2site(sites = gml_sites)
+    workplan = out['workplan']
+    no_of_files_generated = workplan.shape[0]
+    
+    group = workplan.groupby('path2res_file')    
+    for p2rf,g in group:
+        plt = [p2rf.as_posix()] + [p.as_posix() for p in g.path2hrrr_files]
+        msg = '\n\t <-- '.join(plt)
+        messages.append(msg)
+    
+except:
+    error, error_txt, trace = sys.exc_info()
+    tm = ['{}: {}'.format(error.__name__, error_txt.args[0])] + traceback.format_tb(trace)
+    txt = '\n'.join(tm)
+    print(txt)
+    messages.append(txt)
+    errors.append(txt)
+    no_of_files_generated = 0
+    
+messages.append('============\nrun finished {}\n\n'.format(pd.Timestamp(datetime.datetime.now())))
+
+### generate log text
+message_txt = '\n'.join(messages)
+
+if len(errors) !=0:
+    error_txt = '\n\n======================\nERRORS\n=======================\n'
+    error_txt += '\n=======================================\n=========================================='.join(errors)
+    message_txt += error_txt
+
+### save log
+# with open(log_p, 'a') as log:
+#     log.write(message_txt)
+
+### send email with results
+try:
+    import smtplib
+
+    # Import the email modules we'll need
+    from email.mime.text import MIMEText
+
+    # Open a plain text file for reading.  For this example, assume that
+    # the text file contains only ASCII characters.
+    # with open(textfile) as fp:
+    #     # Create a text/plain message
+    msg = MIMEText(message_txt)
+
+    # me == the sender's email address
+    # you == the recipient's email address
+    address  = 'hagen.telg@noaa.gov'
+    if len(errors) == 0:
+        passed = f'Clean ({no_of_files_generated} files)'
+    else:
+        passed = 'Errors ({})'.format(len(errors))
+    msg['Subject'] = 'hrrr_smoke2gml run - {} - {}'.format(passed, pd.Timestamp(datetime.datetime.now()))
+    msg['From'] = address
+    msg['To'] = address
+
+    # Send the message via our own SMTP server.
+    s = smtplib.SMTP('localhost')
+    s.send_message(msg)
+    s.quit()
+except:
+    print('sending email failed')

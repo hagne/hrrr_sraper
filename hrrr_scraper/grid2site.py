@@ -58,8 +58,10 @@ def match_hrrr2sites(hrrr_ds, sites, discard_outsid_grid = 2.2, verbose = True):
 
 def project_grid2site(path2hrrr_files = '/mnt/data/data/hrrr_smoke/subset/',#path to smoke files
                       path2res_files = '/mnt/data/data/hrrr_smoke/smoke_at_gml/', # basically the output folder
-                      sites = None):
-
+                      sites = None,
+                      do_projection = True,
+                      save = True):
+    out = {}
     # some cleanup
     path2hrrr_files = pl.Path(path2hrrr_files)
     path2res_files = pl.Path(path2res_files)
@@ -83,18 +85,24 @@ def project_grid2site(path2hrrr_files = '/mnt/data/data/hrrr_smoke/subset/',#pat
     # remove if output path exists
     workplan['p2rf_exists'] = workplan.apply(lambda row: row.path2res_file.is_file(), axis = 1)
     workplan = workplan[ ~ workplan.p2rf_exists].copy()
+    out['workplan'] = workplan
 
     ## apply match_hrrr2sites on workplan
-    for idx, row in workplan.iterrows():    
-        hrrr_ds = xr.open_dataset(row.path2hrrr_files)
-        has= match_hrrr2sites(hrrr_ds, sites, verbose = False)
-        # attach to object so pandas excepts it
-        has = type('has',(),{'has':has})
-        workplan.loc[idx, 'hrrr_at_sites'] = has
+  
+    if do_projection:
+        for idx, row in workplan.iterrows():    
+            hrrr_ds = xr.open_dataset(row.path2hrrr_files)
+            has= match_hrrr2sites(hrrr_ds, sites, verbose = False)
+            # attach to object so pandas excepts it
+            has = type('has',(),{'has':has})
+            workplan.loc[idx, 'hrrr_at_sites'] = has
 
-    ## concat hrrr_at_sites into daily datasets and sav
-    for p2r,group in workplan.groupby('path2res_file'):
-        group.index.name = 'datetime'
-        ds_has_ts =  xr.concat([has.has for has in group.hrrr_at_sites], dim = group.index)
-        ds_has_ts.to_netcdf(p2r)
-    return ds_has_ts
+        ## concat hrrr_at_sites into daily datasets and sav
+        ds_has_ts = None
+        for p2r,group in workplan.groupby('path2res_file'):
+            group.index.name = 'datetime'
+            ds_has_ts =  xr.concat([has.has for has in group.hrrr_at_sites], dim = group.index)
+            if save:
+                ds_has_ts.to_netcdf(p2r)
+        out['last_dataset'] = ds_has_ts
+    return out
