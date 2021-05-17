@@ -15,29 +15,61 @@ import multiprocessing as mp
 import time
 
 params = [### verticle profiles
-          {'parameterName' : 'Mass density', 'typeOfLevel' : 'hybrid', 'my_name': 'aerosol_mass_density_vp'},
-          {'parameterName' : 'Specific humidity', 'my_name': 'specific_humidity_vp', 'typeOfLevel' : 'hybrid'},
-          {'parameterName' : '32', 'my_name': 'fraction_of_cloud_cover_vp', 'typeOfLevel' : 'hybrid'},
-          {'parameterName' : 'Geopotential height', 'my_name': 'level_height_geo_potential_vp', 'typeOfLevel' : 'hybrid'},
-          {'parameterName' : 'Temperature', 'my_name': 'temperature_vp', 'typeOfLevel' : 'hybrid'},
-          ### at surface
-          {'parameterName' : 'Mass density', 'typeOfLevel' : 'heightAboveGround', 'my_name': 'aerosol_mass_density_ground_level'},
-          {'parameterName' : 'Downward long-wave radiation flux', 'my_name': 'downward_long_wave_radiation_flux_ground'},
-          {'parameterName' : 'Upward long-wave radiation flux', 'my_name': 'upward_long_wave_radiation_flux_ground', 'typeOfLevel' : 'surface'},
-          {'parameterName' : 'Downward short-wave radiation flux', 'my_name': 'downward_short_wave_radiation_flux_ground'},
-          {'name' : 'Upward short-wave radiation flux', 'my_name': 'uward_short_wave_radiation_flux_ground', 'typeOfLevel' : 'surface'},
-          {'name' : 'Orography', 'my_name': 'orography'},
-          {'parameterName' : 'Temperature', 'my_name': 'temperature_surface', 'typeOfLevel' : 'surface'}, 
-          {'parameterName': 'Geopotential height', 'typeOfLevel':'isothermal', 'level': 253, 'my_name': 'planetary_boundary_layer_height'},   
-          ### column
-          {'parameterName' : 'Total column', 'my_name': 'aerosol_integrated_density_column'},
-          {'parameterName' : 'Precipitable water', 'my_name': 'precipitable_water_column'},
-          {'parameterName' : 'Total cloud cover', 'my_name': 'total_cloud_cover', 'typeOfLevel' : 'atmosphere'},
-          {'parameterName' : '102', 'my_name': 'aerosol_optical_depth'},
-          # clouds
-          {'parameterName' : 'Geopotential height', 'my_name': 'cloud_base_gph', 'typeOfLevel' : 'cloudBase'},
-          {'parameterName' : 'Geopotential height', 'my_name': 'cloud_top_gph', 'typeOfLevel' : 'cloudTop'},
-          {'parameterName' : '196', 'my_name': 'composite_reflectivity', 'typeOfLevel' : 'atmosphere'},
+            {'parameterName' : 'Mass density', 'typeOfLevel' : 'hybrid', 'my_name': 'aerosol_mass_density_vp'},
+            {'parameterName' : 'Specific humidity', 'my_name': 'specific_humidity_vp', 'typeOfLevel' : 'hybrid'},
+            {'parameterName' : '32', 'my_name': 'fraction_of_cloud_cover_vp', 'typeOfLevel' : 'hybrid'},
+            {'parameterName' : 'Geopotential height', 'my_name': 'level_height_geo_potential_vp', 'typeOfLevel' : 'hybrid'},
+            {'parameterName' : 'Temperature', 'my_name': 'temperature_vp', 'typeOfLevel' : 'hybrid'},
+            
+            {'parameterName': 'Pressure', 'typeOfLevel': 'hybrid', 'my_name': 'pressure_vp'},
+            {'name': 'Fraction of cloud cover', 'typeOfLevel': 'hybrid', 'my_name': 'fraction_of_cloud_cover_vp'},
+            {'parameterName': 'Specific humidity', 'typeOfLevel': 'hybrid', 'my_name': 'specific_humidity_vp'},
+            {'name': 'U component of wind', 'typeOfLevel': 'hybrid', 'my_name': 'u_component_of_wind_vp'},
+            {'name': 'V component of wind', 'typeOfLevel': 'hybrid', 'my_name': 'v_component_of_wind_vp'},
+            {'name': 'Vertical velocity', 'typeOfLevel': 'hybrid', 'my_name': 'vertical_velocity_vp'},
+            {'name': 'Turbulent kinetic energy', 'typeOfLevel': 'hybrid', 'my_name': 'turbulent_kinetic_energy_vp'},
+            
+            {'parameterName': 'Cloud mixing ratio', 'typeOfLevel': 'hybrid', 'my_name': 'cloud_mixing_ratio_vp'},
+            {'parameterName': 'Ice water mixing ratio', 'typeOfLevel': 'hybrid', 'my_name': 'ice_water_mixing_ratio_vp'},
+            
+            # trouble getting all the work done ... exclude the next two
+            {'parameterName': 'Rain mixing ratio', 'typeOfLevel': 'hybrid', 'my_name': 'rain_mixing_ratio_vp'},
+            {'parameterName': 'Snow mixing ratio', 'typeOfLevel': 'hybrid', 'my_name': 'snow_mixing_ratio_vp'},
+
+
+            ### at surface
+            {'parameterName' : 'Mass density', 'typeOfLevel' : 'heightAboveGround', 'my_name': 'aerosol_mass_density_ground_level'},
+            {'parameterName' : 'Downward long-wave radiation flux', 'my_name': 'downward_long_wave_radiation_flux_surface'},
+            {'parameterName' : 'Upward long-wave radiation flux', 'my_name': 'upward_long_wave_radiation_flux_surface', 'typeOfLevel' : 'surface'},
+            {'parameterName' : 'Downward short-wave radiation flux', 'my_name': 'downward_short_wave_radiation_flux_surface'},
+            {'name' : 'Upward short-wave radiation flux', 'my_name': 'uward_short_wave_radiation_flux_surface', 'typeOfLevel' : 'surface'},
+            {'name' : 'Orography', 'my_name': 'orography'},
+            {'parameterName' : 'Temperature', 'my_name': 'temperature_surface', 'typeOfLevel' : 'surface'}, 
+            {'parameterName': 'Geopotential height', 'typeOfLevel':'isothermal', 'level': 253, 'my_name': 'planetary_boundary_layer_height'},  
+            
+            {'parameterName': 'Visibility', 'typeOfLevel': 'surface', 'my_name': 'visibility_surface'},
+            {'parameterName': 'Wind speed (gust)', 'typeOfLevel': 'surface', 'my_name': 'wind_speed_gust_surface'},
+            {'name': 'Surface pressure', 'typeOfLevel': 'surface', 'my_name': 'surface_pressure_surface'},
+            {'parameterName': 'Plant canopy surface water', 'typeOfLevel': 'surface', 'my_name': 'plant_canopy_surface_water_surface'},
+            {'parameterName': 'Snow cover', 'typeOfLevel': 'surface', 'my_name': 'snow_cover_surface'},
+            {'parameterName': 'Snow depth', 'typeOfLevel': 'surface', 'my_name': 'snow_depth_surface'},
+            {'parameterName': 'Precipitation rate', 'typeOfLevel': 'surface', 'my_name': 'precipitation_rate_surface'},
+            {'parameterName': 'Sensible heat net flux', 'typeOfLevel': 'surface', 'my_name': 'sensible_heat_net_flux_surface'},
+            {'parameterName': 'Latent heat net flux', 'typeOfLevel': 'surface', 'my_name': 'latent_heat_net_flux_surface'},
+            {'parameterName': 'Ground heat flux', 'typeOfLevel': 'surface', 'my_name': 'ground_heat_flux_surface'},
+            {'name': 'GPP coefficient from Biogenic Flux Adjustment System', 'typeOfLevel': 'surface', 'my_name': 'gpp_coefficient_from_biogenic_flux_adjustment_system_surface'},
+            {'parameterName': 'Convective available potential energy', 'typeOfLevel': 'surface', 'my_name': 'convective_available_potential_energy_surface'},
+            {'parameterName': 'Convective inhibition', 'typeOfLevel': 'surface', 'my_name': 'convective_inhibition_surface'},
+          
+            ### column
+            {'parameterName' : 'Total column', 'my_name': 'aerosol_integrated_density_column'},
+            {'parameterName' : 'Precipitable water', 'my_name': 'precipitable_water_column'},
+            {'parameterName' : 'Total cloud cover', 'my_name': 'total_cloud_cover', 'typeOfLevel' : 'atmosphere'},
+            {'parameterName' : '102', 'my_name': 'aerosol_optical_depth'},
+            # clouds
+            {'parameterName' : 'Geopotential height', 'my_name': 'cloud_base_gph', 'typeOfLevel' : 'cloudBase'},
+            {'parameterName' : 'Geopotential height', 'my_name': 'cloud_top_gph', 'typeOfLevel' : 'cloudTop'},
+            {'parameterName' : '196', 'my_name': 'composite_reflectivity', 'typeOfLevel' : 'atmosphere'},
           
 #           {'parameterName' : '', 'my_name': '', 'typeOfLevel' : ''},
          ]
@@ -206,10 +238,13 @@ def read_selected_fields(grbs, vp = True, raise_error_when_varible_missing = Tru
         levels. Assumes same time, pressure levels. Compiles to a cube"""
         n_levels = len(grb_obj)
         levels = np.array([grb_element['level'] for grb_element in grb_obj])
+        # print(f'{levels.dtype}, {levels.max()}')
         indexes = np.argsort(levels)#[::-1] # highest pressure first
-        cube = np.zeros([n_levels, grb_obj[0].values.shape[0], grb_obj[1].values.shape[1]])
+        cube = np.zeros([n_levels, grb_obj[0].values.shape[0], grb_obj[1].values.shape[1]], dtype = np.float32)
         for i in range(n_levels):
             cube[i,:,:] = grb_obj[indexes[i]].values
+            
+        # print(f'{cube.dtype}, {cube.max()}')
         cube_dict = {'data' : cube, 'units' : grb_obj[0]['units'],
                      'levels' : levels[indexes]}
         return cube_dict
@@ -231,8 +266,13 @@ def read_selected_fields(grbs, vp = True, raise_error_when_varible_missing = Tru
         for par in param_sel:
             part = par.copy()
             part.pop('my_name')
-            
-            grbsel = grbs.select(**part)
+            try:
+                grbsel = grbs.select(**part)
+            except ValueError as err:
+                if err.args[0] == "no matches found":
+                    # print(err, end = ' ')
+                    print(part)
+                raise
             # grbsel
     
             out = grb_to_grid(grbsel)
@@ -243,11 +283,11 @@ def read_selected_fields(grbs, vp = True, raise_error_when_varible_missing = Tru
                                                'longitude':(['x','y'], lon),
                                                'level' :levels}, 
                          dims = ['level','x','y'])
-    
             grb = grbsel[0]
             da.attrs = {k: grb[k] for k in grb.keys() if k in attrs}
             ds[par['my_name']] = da
-
+    
+    # print('3d done')
     ### get the 2d stuff
 
     param_sel = []
@@ -263,7 +303,18 @@ def read_selected_fields(grbs, vp = True, raise_error_when_varible_missing = Tru
         part.pop('my_name')
         
         if raise_error_when_varible_missing:
-            grbsel = grbs.select(**part)
+            
+            # grbsel = grbs.select(**part)
+            
+            try:
+                grbsel = grbs.select(**part)
+            except ValueError as err:
+                if err.args[0] == "no matches found":
+                    # print(err, end = ' ')
+                    print(part)
+                raise
+            
+            
         else:
             try:
                 grbsel = grbs.select(**part)
@@ -449,13 +500,57 @@ def scrape_hrrr_conus(sites,
                     # dp = True,
                     # srf = True,
                     ):
-
-
     """
     
-    test:
-        1: initialization. (ftp_connection, workplan)
-        2: processes first row only
+
+    Parameters
+    ----------
+    sites : TYPE
+        DESCRIPTION.
+    local_file_source : bool, optional
+        If True a local folder will be treated as if on the ftp server. Data 
+        will still be copied to the temporary folder. This is done more 
+        elegantly in the satellite scraper. The default is False.
+    path2data_tmp : TYPE, optional
+        DESCRIPTION. The default is '/mnt/telg/tmp/hrrr_tmp/'.
+    path2data : TYPE, optional
+        DESCRIPTION. The default is '/mnt/telg/tmp/hrrr_tmp_inter/'.
+    ftp_server : TYPE, optional
+        DESCRIPTION. The default is 'gsdftp.fsl.noaa.gov'.
+    ftp_login : TYPE, optional
+        DESCRIPTION. The default is "anonymous".
+    ftp_password : TYPE, optional
+        DESCRIPTION. The default is "hagen.telg@noaa.gov".
+    ftp_path2files : TYPE, optional
+        DESCRIPTION. The default is '/hrrr/conus/wrfnat'.
+    no_of_cpu : TYPE, optional
+        DESCRIPTION. The default is 5.
+    #interp_vertical : TYPE, optional
+        DESCRIPTION. The default is None.
+    error_when_not_enough_mem : TYPE, optional
+        DESCRIPTION. The default is True.
+    verbose : TYPE, optional
+        DESCRIPTION. The default is False.
+    test : TYPE, optional
+        DESCRIPTION. The default is False.
+    # returns : TYPE, optional
+        DESCRIPTION. The default is None.
+    # save : TYPE, optional
+        DESCRIPTION. The default is True.
+    # vp : TYPE, optional
+        DESCRIPTION. The default is True.
+    # dp : TYPE, optional
+        DESCRIPTION. The default is True.
+    # srf : TYPE, optional
+        DESCRIPTION. The default is True.
+     : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    out : TYPE
+        DESCRIPTION.
+
     """
 
     # log = {}
@@ -507,10 +602,13 @@ def scrape_hrrr_conus(sites,
     #limit the size of workplan .... can probably go later on
     
     if test == 2:
-        wpt = workplan.iloc[[0]]
+        wpt = workplan.iloc[:1]
+    elif test == 3:
+        wpt = workplan.iloc[:no_of_cpu]
     else:
         wpt = workplan
     
+    print(f'no files to process: {wpt.shape[0]}')
     out['workplan'] = wpt
     # def fkt2(row):
     #     print(row.files_on_ftp)
@@ -580,8 +678,14 @@ def concat2daily_files(path2scraped_files = '/mnt/telg/tmp/hrrr_tmp_inter/',
         fc_list = []
         for frcst_cycle, fc_group in date_group.groupby('frcst_cycle'):
             fc_list.append(xr.open_mfdataset(fc_group.path2scraped_files, concat_dim='forecast_hour'))
-
-        ds = xr.concat(fc_list, dim = 'datetime')
+            
+        try:
+            ds = xr.concat(fc_list, dim = 'datetime')
+        except ValueError as err:
+            errmsg = err.args[0]
+            err.args = (f'Problem encontered while processing date {date}: {errmsg}',)
+            raise
+            
         fn_out = date_group.path2concat_files.unique()
 
         assert(len(fn_out) == 1)
