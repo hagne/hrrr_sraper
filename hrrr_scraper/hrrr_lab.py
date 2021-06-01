@@ -242,7 +242,8 @@ class ProjectorProject(object):
             pool.join()
         if test == False:
             concat = Concatonator(path2scraped_files = self.path2data,
-                         path2concat_files = self.path2concatfiles,).save()
+                         path2concat_files = self.path2concatfiles,)
+            concat.save()
             out['concat'] = concat
         return out
 
