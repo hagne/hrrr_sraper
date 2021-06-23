@@ -104,6 +104,31 @@ class ProjectorProject(object):
                  ftp_server = 'ftp.ncep.noaa.gov',
                  ftp_path2files = '/pub/data/nccf/com/hrrr/prod',
                  max_forcast_interval= 18):
+        """
+        https://nomads.ncep.noaa.gov/
+
+        Parameters
+        ----------
+        sites : TYPE
+            DESCRIPTION.
+        path2raw : TYPE, optional
+            DESCRIPTION. The default is '/mnt/telg/tmp/hrrr_tmp/'.
+        path2projected_individual : TYPE, optional
+            DESCRIPTION. The default is '/mnt/telg/tmp/hrrr_tmp_inter/'.
+        path2projected_final : TYPE, optional
+            DESCRIPTION. The default is '/mnt/telg/projects/smoke_at_gml_sites/data/wrfnat/'.
+        ftp_server : TYPE, optional
+            DESCRIPTION. The default is 'ftp.ncep.noaa.gov'.
+        ftp_path2files : TYPE, optional
+            DESCRIPTION. The default is '/pub/data/nccf/com/hrrr/prod'.
+        max_forcast_interval : TYPE, optional
+            DESCRIPTION. The default is 18.
+
+        Returns
+        -------
+        None.
+
+        """
         # self.list_of_files_onftp = None
         # self.list_of_files_onftp = None
         self.max_forcast_interval= max_forcast_interval

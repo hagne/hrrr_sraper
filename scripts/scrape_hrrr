@@ -99,7 +99,14 @@ try:
         #                                   # test = 2
         #                                   )
         
-        pp = hrrr_lab.ProjectorProject(gml_sites)
+        pp =   hrrr_lab.ProjectorProject(gml_sites, 
+                                         path2raw = '/mnt/telg/tmp/hrrr_tmp/',
+                                         path2projected_individual = '/mnt/telg/tmp/hrrr_tmp_inter/',
+                                         path2projected_final = '/mnt/telg/projects/smoke_at_gml_sites/data/wrfnat/',
+                                         ftp_server = 'ftp.ncep.noaa.gov',
+                                         ftp_path2files = '/pub/data/nccf/com/hrrr/prod',
+                                         max_forcast_interval= 18
+                                         )
         no_of_files_generated = pp.workplan.shape[0]
         print(f'number of files to process: {no_of_files_generated}')
         out = pp.process(no_of_cpu=no_of_cpu)
