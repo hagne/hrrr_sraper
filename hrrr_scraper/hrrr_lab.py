@@ -7,9 +7,9 @@ import pygrib
 import xarray as xr
 import numpy as np
 import pathlib as pl
-import shutil
+#import shutil
 import pandas as pd
-import psutil
+#import psutil
 
 import multiprocessing as mp
 import time
@@ -243,7 +243,7 @@ class ProjectorProject(object):
         #     wpe.process()
         #     return 
         self.remove_artefacts()
-        
+        out = {}
         if test == 2:
             wpt = self.workplan.iloc[:1]
         elif test == 3:
@@ -259,7 +259,7 @@ class ProjectorProject(object):
             pool = mp.Pool(processes=no_of_cpu)
             idx, rows = zip(*list(wpt.iterrows()))
             # out['pool_return'] = pool.map(partial(process_workplan_row, **{'ftp_settings': ftp_settings, 'sites': sites}), rows)
-            out = {}
+            
             pool_return = pool.map(partial(WorkplanEntry, **{'project': self, 'autorun': True}), rows)
             # out['pool_return'] = pool_return
             
@@ -356,6 +356,10 @@ class HrrrWrfNat(object):
             times.append(time.time())
             dt = times[-1] - times[-2]
             print(f'generate altitude time: {dt:.2f}')
+        
+        #### add site names
+        ds.site.attrs['names'] = [f'{st.abb}: {st.name} ({st.state})' for st in sites.stations._stations_list if st.abb in ds.site.data]
+        
         # ds = ds.expand_dims({"forecast_hour": [self.row.forcast_interval], "datetime": [row.cycle_datetime]})
         return Projection(ds)
 

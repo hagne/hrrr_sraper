@@ -17,7 +17,8 @@ from atmPy.general import measurement_site as ms
 import psutil
 import numpy as np
 
-version = '2.0.0'
+version = '2.0.1'
+
 
 ### helper
 
@@ -62,7 +63,7 @@ try:
     no_of_processes_running = len(running_processes)
     print(f'number of hrrr_scrape processes running: {no_of_processes_running}')
     mem = psutil.virtual_memory()
-    no_of_cpu = round((100 - mem.percent - 30)/20)
+    no_of_cpu = round((100 - mem.percent - 15)/20)
     print(f'numper of cpus: {no_of_cpu}')
     messages.append(f'numper of cpus: {no_of_cpu}')
     if no_of_cpu < 1:
@@ -95,14 +96,26 @@ try:
         gml_sites.add_station(ms.Station(abbreviation= 'WMS',name = 'White Mtn Summit', state = 'CA', lat=37.634093, lon=-118.255688, alt=4343))
         gml_sites.add_station(ms.Station(abbreviation= 'BCO',name = 'Barcroft Obs', state = 'CA', lat=37.58925, lon=-118.238703, alt=3889))
         
-        # out = scrapelab.scrape_hrrr_conus(gml_sites, no_of_cpu= no_of_cpu, error_when_not_enough_mem=False, 
-        #                                   # test = 2
-        #                                   )
+        #### Sail-Splash starting: 20211028
+        # test if new stations exist
+        new_stations = [dict(abbreviation= 'SS_AP',     name = 'Avery Picnic (PSL’s ASFS sled)',        state = 'CO', lat=38.97262, lon=-106.99717, alt=0),
+                        dict(abbreviation= 'SS_AMF2',   name = 'DOE AMF2',                              state = 'CO', lat=38.9564,  lon=-106.98693, alt=0),
+                        dict(abbreviation= 'SS_KP',     name = 'Kettle Ponds',                          state = 'CO', lat=38.94177, lon=-106.97308, alt=0),
+                        dict(abbreviation= 'SS_KPA',    name = 'Kettle Ponds Annex (PSL’s ASFS sled)',  state = 'CO', lat=38.93939, lon=-106.96985, alt=0),
+                        dict(abbreviation= 'SS_BC',     name = 'Brush Creek',                           state = 'CO', lat=38.85915, lon=-106.9209,  alt=0),
+                        dict(abbreviation= 'SS_RJ',     name = 'Roaring Judy',                          state = 'CO', lat=38.71688, lon=-106.85304, alt=0),
+                        ]
+                        
+        for ns in new_stations:
+            assert(ns['abbreviation'] not in [s.abb for s in gml_sites.stations._stations_list]), f"Station with abbriviation {ns['abbreviation']} already exists in gml_sites"
+            gml_sites.add_station(ms.Station(**ns))
+                                           
         
         pp =   hrrr_lab.ProjectorProject(gml_sites, 
                                          path2raw = '/mnt/telg/tmp/hrrr_tmp/',
                                          path2projected_individual = '/mnt/telg/tmp/hrrr_tmp_inter/',
-                                         path2projected_final = '/mnt/telg/projects/smoke_at_gml_sites/data/wrfnat/',
+                                         # path2projected_final = '/mnt/telg/projects/smoke_at_gml_sites/data/wrfnat/',
+                                         path2projected_final = '/nfs/stu3data2/Model_data/HRRR/HRRRv4_conus_projected/',
                                          ftp_server = 'ftp.ncep.noaa.gov',
                                          ftp_path2files = '/pub/data/nccf/com/hrrr/prod',
                                          max_forcast_interval= 18
