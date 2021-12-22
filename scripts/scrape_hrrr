@@ -16,8 +16,15 @@ import atmPy.data_archives.noaa_gml
 from atmPy.general import measurement_site as ms
 import psutil
 import numpy as np
+import json
+import pathlib as pl
+import smtplib
+from email.mime.text import MIMEText
+import os
 
-version = '2.0.1'
+pid = os.getpid()
+print(f'pid of current process: {pid}')
+version = '2.0.2'
 
 
 ### helper
@@ -25,6 +32,9 @@ version = '2.0.1'
 def monitor_processes(name = 'scrape_hrrr', duration = 300, verbose = False):
     process_name = name
     mon_p = [p for p in psutil.process_iter() if p.name() == process_name]
+    #### remove the process of this run
+    mon_p = [p for p in mon_p if p.pid != pid]
+    
     # pid = [p.pid for p in mon_p]
 
     mon_proc = pd.DataFrame()
@@ -53,13 +63,127 @@ def monitor_processes(name = 'scrape_hrrr', duration = 300, verbose = False):
         i+=1
     return mon_proc
 
-### execute the program
+def killallhrrrprocesses(test = False):
+    if test:
+        print('killed')
+    else:
+        process_name = "scrape_hrrr"
+        pmatch = [p for p in psutil.process_iter() if process_name == p.name()]
+        #### remove the process of this run
+        pmatch = [p for p in pmatch if p.pid != pid]
+        
+        if len(pmatch) > 0:
+            print(f'matching processes: {len(pmatch)}')
+            for pm in pmatch:   
+                print(pm)
+                print('======sdf===========')
+                print(f'name: {pm.name()}', end = '\t') 
+                print(f'pid: {pm.pid}')
+                print('=================')
+                print(f'cpu use %: {pm.cpu_percent()}')
+                print(f'mem use %: {pm.memory_percent():0.0f}')
+                print(f'status%: {pm.status()}')
+                pm.kill()
+        else:
+            print('no match found')
+
+def check_log(path2log = 'my_dict.json',
+              maxlength = 50,
+              minlength = 4,
+              mincpumax = 5,
+              verbose = True):
+    if verbose:
+        print('checklog\n==================')
+        
+    out = {}
+    p2f_shortlog = pl.Path(path2log)
+    
+    if not p2f_shortlog.is_file():
+        if verbose:
+            print('no log file, return empty loglist')
+            print('++++++++++++++++++++++++')
+        out['loglist'] = [{'exit_status':'newlog'}]
+        return out
+    
+    with open(p2f_shortlog) as f:
+        loglist = json.load(f)
+
+    # cut to max length
+    if len(loglist)>maxlength:
+        loglist = loglist[-maxlength:]
+        if verbose:
+            print('list was cut')
+
+      
+    if len(loglist) >= minlength:
+
+        # if last is False, check if the others are false too and then kill processes
+        verbose = True
+        logl = loglist[-minlength:]
+        if logl[-1]['exit_status'] == 'clean':
+            if verbose:
+                print('clean')
+        elif 'killed' in [log['exit_status'] for log in logl]:
+            if verbose:
+                print('killed in logs')
+        elif 'error' in [log['exit_status'] for log in logl]:
+            if verbose:
+                print('error in logs')
+        elif 'newlog' in [log['exit_status'] for log in logl]:
+            if verbose:
+                print('new log file in logs')
+        else:
+            if verbose:
+                print('Last is unclean')
+                print(np.array([log['cpumax'] for log in logl]))
+            if (np.array([log['cpumax'] for log in logl]) > mincpumax).any():
+                if verbose:
+                    # tt = ', '.join([f'{log['cpumax']:0.2f}' for log in logl])
+                    tt = ', '.join([str(round(log['cpumax']))  for log in logl])
+                    print(f'At least one has cpumax above threshold (thresh:{mincpumax}, is: {tt})')
+            else:
+                if verbose:
+                    print('killing all scrape_hrrr processes')
+                killallhrrrprocesses()
+                loglist.append(dict(exit_status = 'killed',
+                                    logtime = pd.Timestamp.now().__str__()))
+                
+                msg = MIMEText('All scrape_hrrr processes killed ... pretty sure they are zombies')
+
+                # me == the sender's email address
+                # you == the recipient's email address
+                address  = 'hagen.telg@noaa.gov'
+                passed = 'Killed'
+                msg['Subject'] = 'scrape_hrrr_smoke run - {} - {}'.format(passed, pd.Timestamp(datetime.datetime.now()))
+                msg['From'] = address
+                msg['To'] = address
+
+                # Send the message via our own SMTP server.
+                s = smtplib.SMTP('localhost')
+                s.send_message(msg)
+                s.quit()
+    else:
+        if verbose:
+            print('list shorter then minlength')
+            
+    out['loglist'] = loglist
+    if verbose:
+        print('++++++++++++++++++++++++')
+    return out
+
+#### execute the program
+#### -------
 messages = ['run started {}\n========='.format(pd.Timestamp(datetime.datetime.now()))]
 messages.append(f'scrape_hrrr_conus_nat version {version}')
+p2f_shortlog = '/mnt/telg/tmp/log.txt'
 errors = []
 abort = False
+exit_status = 'fail'
+loglist = check_log(path2log=p2f_shortlog)['loglist']
+
 try:
     running_processes = [p for p in psutil.process_iter() if p.name() == "scrape_hrrr"]
+    running_processes = [p for p in running_processes if p.pid != pid]
     no_of_processes_running = len(running_processes)
     print(f'number of hrrr_scrape processes running: {no_of_processes_running}')
     mem = psutil.virtual_memory()
@@ -72,7 +196,8 @@ try:
         no_of_files_generated_bdl = 0
         abort = True
         print('aborted,insufficient memoryg')
-    elif no_of_processes_running > 1:
+        exit_status = 'low_memory'
+    elif no_of_processes_running > 0:
         
         messages.append('aborted since processess still running')
         for p in running_processes:
@@ -87,6 +212,7 @@ try:
         no_of_files_generated = 0
         no_of_files_generated_bdl = 0
         abort = True
+        exit_status = 'process_running'
         print('aborted, process still running')
     else:
         gml_sites = atmPy.data_archives.noaa_gml.get_all_sites()
@@ -130,6 +256,7 @@ try:
         no_of_files_generated_bdl = workplan_bdl.shape[0]
         # for idx,row in workplan.iterrow():
     #     messages.append(f'{row.path2tempfile} -> {row.path2file}')
+        exit_status = 'clean'
 except:
     error, error_txt, trace = sys.exc_info()
     tm = ['{}: {}'.format(error.__name__, error_txt.args[0])] + traceback.format_tb(trace)
@@ -145,21 +272,41 @@ messages.append('============\nrun finished {}\n\n'.format(pd.Timestamp(datetime
 ### generate log text
 message_txt = '\n'.join(messages)
 
+
+
+#### save log
+##### shortlog
+try:
+    print('logging')
+    log = {}
+    log['exit_status'] = exit_status
+    log['timestamp'] = pd.Timestamp.now().__str__()
+    # loglist = []
+    if exit_status == 'process_running':    
+        df = mon_proc.mean()
+        df = df.loc[[idx for idx in df.index if 'cpu' in idx]]
+        log['cpuavg'] = df.mean()#'{:0.2f}'.format(df.mean())
+        log['cpumax'] = df.max()#'{:0.2f}'.format(df.max())
+        loglist.append(log)
+        
+    with open(p2f_shortlog, 'w') as f:
+        # loglist.to_csv(f)
+        json.dump(loglist, f)
+    
+except:
+    errors.append('logging failed!?!?')
+    print('writing log failed')
+
 if len(errors) !=0:
     error_txt = '\n\n======================\nERRORS\n=======================\n'
     error_txt += '\n=======================================\n=========================================='.join(errors)
     message_txt += error_txt
-
-### save log
-# with open(log_p, 'a') as log:
-#     log.write(message_txt)
-
-### send email with results
+#### send email with results
 try:
-    import smtplib
+    # import smtplib
 
-    # Import the email modules we'll need
-    from email.mime.text import MIMEText
+    # # Import the email modules we'll need
+    # from email.mime.text import MIMEText
 
     # Open a plain text file for reading.  For this example, assume that
     # the text file contains only ASCII characters.
