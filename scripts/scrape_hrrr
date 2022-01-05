@@ -132,6 +132,9 @@ def check_log(path2log = 'my_dict.json',
         elif 'newlog' in [log['exit_status'] for log in logl]:
             if verbose:
                 print('new log file in logs')
+        elif 'no_files_on_server'  in [log['exit_status'] for log in logl]:
+            if verbose:
+                print('No files on server in in last logs')
         else:
             if verbose:
                 print('Last is unclean')
@@ -180,8 +183,11 @@ errors = []
 abort = False
 exit_status = 'fail'
 loglist = check_log(path2log=p2f_shortlog)['loglist']
+# verbose = True
 
-try:
+print('Begin processing')
+print('=================')
+try:   
     running_processes = [p for p in psutil.process_iter() if p.name() == "scrape_hrrr"]
     running_processes = [p for p in running_processes if p.pid != pid]
     no_of_processes_running = len(running_processes)
@@ -236,8 +242,8 @@ try:
             assert(ns['abbreviation'] not in [s.abb for s in gml_sites.stations._stations_list]), f"Station with abbriviation {ns['abbreviation']} already exists in gml_sites"
             gml_sites.add_station(ms.Station(**ns))
                                            
-        
-        pp =   hrrr_lab.ProjectorProject(gml_sites, 
+        #### process 
+        pp =  hrrr_lab.ProjectorProject(gml_sites, 
                                          path2raw = '/mnt/telg/tmp/hrrr_tmp/',
                                          path2projected_individual = '/mnt/telg/tmp/hrrr_tmp_inter/',
                                          # path2projected_final = '/mnt/telg/projects/smoke_at_gml_sites/data/wrfnat/',
@@ -248,15 +254,20 @@ try:
                                          )
         no_of_files_generated = pp.workplan.shape[0]
         print(f'number of files to process: {no_of_files_generated}')
-        out = pp.process(no_of_cpu=no_of_cpu)
         
-        
-        # out_bdl = scrapelab.concat2daily_files()
-        workplan_bdl = out['concat'].workplan
-        no_of_files_generated_bdl = workplan_bdl.shape[0]
-        # for idx,row in workplan.iterrow():
-    #     messages.append(f'{row.path2tempfile} -> {row.path2file}')
-        exit_status = 'clean'
+        if no_of_files_generated == 0:
+            exit_status = 'no_files_on_server'
+        else:
+            out = pp.process(no_of_cpu=no_of_cpu)
+            
+            # out_bdl = scrapelab.concat2daily_files()
+            workplan_bdl = out['concat'].workplan
+            no_of_files_generated_bdl = workplan_bdl.shape[0]
+            # for idx,row in workplan.iterrow():
+        #     messages.append(f'{row.path2tempfile} -> {row.path2file}')
+            exit_status = 'clean'
+            
+        print('Done!!')
 except:
     error, error_txt, trace = sys.exc_info()
     tm = ['{}: {}'.format(error.__name__, error_txt.args[0])] + traceback.format_tb(trace)
@@ -266,6 +277,8 @@ except:
     errors.append(txt)
     no_of_files_generated = 0
     no_of_files_generated_bdl = 0
+
+print('++++++++++++++++++++++++++')
     
 messages.append('============\nrun finished {}\n\n'.format(pd.Timestamp(datetime.datetime.now())))
 
@@ -273,11 +286,12 @@ messages.append('============\nrun finished {}\n\n'.format(pd.Timestamp(datetime
 message_txt = '\n'.join(messages)
 
 
-
 #### save log
 ##### shortlog
+
+print('logging')
+print('=========')
 try:
-    print('logging')
     log = {}
     log['exit_status'] = exit_status
     log['timestamp'] = pd.Timestamp.now().__str__()
@@ -292,16 +306,19 @@ try:
     with open(p2f_shortlog, 'w') as f:
         # loglist.to_csv(f)
         json.dump(loglist, f)
-    
+    print('Done')
 except:
     errors.append('logging failed!?!?')
     print('writing log failed')
+print('++++++++++++++')
 
 if len(errors) !=0:
     error_txt = '\n\n======================\nERRORS\n=======================\n'
     error_txt += '\n=======================================\n=========================================='.join(errors)
     message_txt += error_txt
 #### send email with results
+print('Sending email')
+print('==============')
 try:
     # import smtplib
 
@@ -319,6 +336,8 @@ try:
     address  = 'hagen.telg@noaa.gov'
     if abort:
         passed = 'Aborted'
+    elif exit_status == 'no_files_on_server':
+        passed = 'Abnormal (no files on server)'
     elif len(errors) == 0:
         passed = f'Clean ({no_of_files_generated}/{no_of_files_generated_bdl} files)'
     else:
@@ -331,5 +350,10 @@ try:
     s = smtplib.SMTP('localhost')
     s.send_message(msg)
     s.quit()
+    print('Done')
 except:
     print('sending email failed')
+
+print('++++++++++++++++')
+
+print('End of scirpt!')

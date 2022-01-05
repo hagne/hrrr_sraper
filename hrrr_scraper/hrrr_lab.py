@@ -244,7 +244,10 @@ class ProjectorProject(object):
         #     return 
         self.remove_artefacts()
         out = {}
-        if test == 2:
+        if self.workplan.shape[0] == 0:
+            print('noting to process')
+            return
+        elif test == 2:
             wpt = self.workplan.iloc[:1]
         elif test == 3:
             wpt = self.workplan.iloc[:no_of_cpu]
@@ -257,6 +260,7 @@ class ProjectorProject(object):
                 wpe.process()
         else:
             pool = mp.Pool(processes=no_of_cpu)
+            # print(wpt.shape)
             idx, rows = zip(*list(wpt.iterrows()))
             # out['pool_return'] = pool.map(partial(process_workplan_row, **{'ftp_settings': ftp_settings, 'sites': sites}), rows)
             
