@@ -145,6 +145,8 @@ class ProjectorProject(object):
         
         self._ftp = None
         self._workplan = None
+        self.verbose = False
+        self.remove_from_workplan_when_output_exists = True
         
         
     @property
@@ -173,20 +175,37 @@ class ProjectorProject(object):
                 return out
             #get all files from relevant folders
             files_all = []
-            for day in self.ftp.nlst():
+            daysonftp = self.ftp.nlst()
+            if self.verbose:
+                print(f'ftp: available days: {daysonftp}')
+            for day in daysonftp:
+                if self.verbose:
+                    print(f'ftp: enter day: {day}')
+                    
                 self.ftp.cwd(self.ftp_path2files) # not really needed in first loop, but in second!
             #     break
                 # enter relevant folders
                 self.ftp.cwd(day)
+                if self.verbose:
+                    print(f'ftp: whats here: {self.ftp.nlst()}')
+                    print('ftp: entering conus')
                 self.ftp.cwd('conus') # there is also alaska, which might be of interest in the future
-            
+
                 #list files
                 files = self.ftp.nlst()
+                if self.verbose:
+                    # print(f'ftp: whats here: {files}')
+                    print(f'ftp: no of files in here {len(files)}')
                 # only get the grib files
                 files = [f for f in files if f.split('.')[-1] == 'grib2']
+                if self.verbose:
+                    # print(f'ftp: whats here: {files}')
+                    print(f'ftp: no of files ending on grib {len(files)}')
                 # wrfnat has the 3d data, there are other files of smaller sized which are merely a subset of values, e.g. surface values
                 files =[f for f in files if 'wrfnat' in f.split('.')[-2]]
-            
+                if self.verbose:
+                    # print(f'ftp: whats here: {files}')
+                    print(f"ftp: no of files with: if 'wrfnat' in f.split('.')[-2]: {len(files)}")
                 # add full path to list of files
                 fld_current = pl.Path(self.ftp.pwd())
                 files_all += [fld_current.joinpath(f) for f in files]
@@ -215,9 +234,13 @@ class ProjectorProject(object):
             workplan['path2file']  = workplan.apply(lambda row: path2data.joinpath(f'{row.cycle_datetime.year:04d}{row.cycle_datetime.month:02d}{row.cycle_datetime.day:02d}_{row.cycle_datetime.hour:02d}_fi{row.forcast_interval:02d}' + '.nc'), axis=1)
             
             ### only files that don't exist yet
+            # if self.verbose:
+            #     # print(f'ftp: whats here: {files}')
+            #     print(f'ftp: no of files that do not exist yet {len(files)}')
             workplan['output_file_exits'] = workplan.apply(lambda row: row.path2file.is_file(), axis=1)
             
-            workplan = workplan[~workplan.output_file_exits].copy()
+            if self.remove_from_workplan_when_output_exists:
+                workplan = workplan[~workplan.output_file_exits].copy()
             
             workplan.sort_values(['cycle_datetime', 'forcast_interval'], inplace= True)
             
