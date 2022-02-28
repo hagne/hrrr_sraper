@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+examples/operationalize/ncep_hrrr_2d.2133506000000.grib2
+examples/operationalize/ncep_hrrr_3d.2133506000000.grib2
+examples/operationalize/ncep_rap_3d.2133506000000.grib2

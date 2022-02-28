@@ -1,0 +1,171 @@
+,messagenumber,typeOfLevel,level,parameterName,nameOfFirstFixedSurface,nameOfSecondFixedSurface,shortNameECMF,shortName,nameECMF,name,cfNameECMF,cfName,cfVarNameECMF,cfVarName
+0,1,atmosphere,0,196,Entire atmosphere,Missing,unknown,refc,unknown,Maximum/Composite radar reflectivity,unknown,unknown,unknown,unknown
+1,2,cloudTop,0,3,Level of cloud tops,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+2,3,atmosphere,0,201,Entire atmosphere,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+3,4,atmosphere,0,Vertically-integrated liquid,Entire atmosphere,Missing,veril,veril,Vertically-integrated liquid,Vertically-integrated liquid,unknown,unknown,veril,veril
+4,5,surface,0,Visibility,Ground or water surface,Missing,vis,vis,Visibility,Visibility,unknown,unknown,vis,vis
+5,6,heightAboveGround,1000,195,Specified height level above ground,Missing,unknown,refd,unknown,Derived radar reflectivity,unknown,unknown,unknown,unknown
+6,7,heightAboveGround,4000,195,Specified height level above ground,Missing,unknown,refd,unknown,Derived radar reflectivity,unknown,unknown,unknown,unknown
+7,8,isothermal,263,195,Isothermal level,Missing,unknown,refd,unknown,Derived radar reflectivity,unknown,unknown,unknown,unknown
+8,9,surface,0,Wind speed (gust),Ground or water surface,Missing,gust,gust,Wind speed (gust),Wind speed (gust),unknown,unknown,gust,gust
+9,10,isobaricInhPa,250,u-component of wind,Isobaric surface,Missing,u,u,U component of wind,U component of wind,eastward_wind,eastward_wind,u,u
+10,11,isobaricInhPa,250,v-component of wind,Isobaric surface,Missing,v,v,V component of wind,V component of wind,northward_wind,northward_wind,v,v
+11,12,isobaricInhPa,300,u-component of wind,Isobaric surface,Missing,u,u,U component of wind,U component of wind,eastward_wind,eastward_wind,u,u
+12,13,isobaricInhPa,300,v-component of wind,Isobaric surface,Missing,v,v,V component of wind,V component of wind,northward_wind,northward_wind,v,v
+13,14,isobaricInhPa,500,Geopotential height,Isobaric surface,Missing,gh,gh,Geopotential Height,Geopotential Height,geopotential_height,geopotential_height,gh,gh
+14,15,isobaricInhPa,500,Temperature,Isobaric surface,Missing,t,t,Temperature,Temperature,air_temperature,air_temperature,t,t
+15,16,isobaricInhPa,500,Dew point temperature,Isobaric surface,Missing,dpt,dpt,Dew point temperature,Dew point temperature,unknown,unknown,dpt,dpt
+16,17,isobaricInhPa,500,u-component of wind,Isobaric surface,Missing,u,u,U component of wind,U component of wind,eastward_wind,eastward_wind,u,u
+17,18,isobaricInhPa,500,v-component of wind,Isobaric surface,Missing,v,v,V component of wind,V component of wind,northward_wind,northward_wind,v,v
+18,19,isobaricInhPa,700,Geopotential height,Isobaric surface,Missing,gh,gh,Geopotential Height,Geopotential Height,geopotential_height,geopotential_height,gh,gh
+19,20,isobaricInhPa,700,Temperature,Isobaric surface,Missing,t,t,Temperature,Temperature,air_temperature,air_temperature,t,t
+20,21,isobaricInhPa,700,Dew point temperature,Isobaric surface,Missing,dpt,dpt,Dew point temperature,Dew point temperature,unknown,unknown,dpt,dpt
+21,22,isobaricInhPa,700,Vertical velocity (geometric),Isobaric surface,Missing,wz,wz,Geometric vertical velocity,Geometric vertical velocity,unknown,unknown,wz,wz
+22,23,isobaricInhPa,700,u-component of wind,Isobaric surface,Missing,u,u,U component of wind,U component of wind,eastward_wind,eastward_wind,u,u
+23,24,isobaricInhPa,700,v-component of wind,Isobaric surface,Missing,v,v,V component of wind,V component of wind,northward_wind,northward_wind,v,v
+24,25,isobaricInhPa,850,Geopotential height,Isobaric surface,Missing,gh,gh,Geopotential Height,Geopotential Height,geopotential_height,geopotential_height,gh,gh
+25,26,isobaricInhPa,850,Temperature,Isobaric surface,Missing,t,t,Temperature,Temperature,air_temperature,air_temperature,t,t
+26,27,isobaricInhPa,850,Dew point temperature,Isobaric surface,Missing,dpt,dpt,Dew point temperature,Dew point temperature,unknown,unknown,dpt,dpt
+27,28,isobaricInhPa,850,u-component of wind,Isobaric surface,Missing,u,u,U component of wind,U component of wind,eastward_wind,eastward_wind,u,u
+28,29,isobaricInhPa,850,v-component of wind,Isobaric surface,Missing,v,v,V component of wind,V component of wind,northward_wind,northward_wind,v,v
+29,30,isobaricInhPa,925,Temperature,Isobaric surface,Missing,t,t,Temperature,Temperature,air_temperature,air_temperature,t,t
+30,31,isobaricInhPa,925,Dew point temperature,Isobaric surface,Missing,dpt,dpt,Dew point temperature,Dew point temperature,unknown,unknown,dpt,dpt
+31,32,isobaricInhPa,925,u-component of wind,Isobaric surface,Missing,u,u,U component of wind,U component of wind,eastward_wind,eastward_wind,u,u
+32,33,isobaricInhPa,925,v-component of wind,Isobaric surface,Missing,v,v,V component of wind,V component of wind,northward_wind,northward_wind,v,v
+33,34,isobaricInhPa,1000,Temperature,Isobaric surface,Missing,t,t,Temperature,Temperature,air_temperature,air_temperature,t,t
+34,35,isobaricInhPa,1000,Dew point temperature,Isobaric surface,Missing,dpt,dpt,Dew point temperature,Dew point temperature,unknown,unknown,dpt,dpt
+35,36,isobaricInhPa,1000,u-component of wind,Isobaric surface,Missing,u,u,U component of wind,U component of wind,eastward_wind,eastward_wind,u,u
+36,37,isobaricInhPa,1000,v-component of wind,Isobaric surface,Missing,v,v,V component of wind,V component of wind,northward_wind,northward_wind,v,v
+37,38,pressureFromGroundLayer,10000,220,Level at specified pressure difference from ground to level,Level at specified pressure difference from ground to level,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+38,39,pressureFromGroundLayer,10000,221,Level at specified pressure difference from ground to level,Level at specified pressure difference from ground to level,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+39,40,sigmaLayer,1,Vertical velocity (geometric),Sigma level,Sigma level,wz,wz,Geometric vertical velocity,Geometric vertical velocity,unknown,unknown,wz,wz
+40,41,meanSea,0,198,Mean sea level,Missing,unknown,mslma,unknown,MSLP (MAPS System Reduction),unknown,unknown,unknown,unknown
+41,42,isobaricInhPa,1000,Geopotential height,Isobaric surface,Missing,gh,gh,Geopotential Height,Geopotential Height,geopotential_height,geopotential_height,gh,gh
+42,43,heightAboveGround,1000,198,Specified height level above ground,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+43,44,isothermal,263,195,Isothermal level,Missing,unknown,refd,unknown,Derived radar reflectivity,unknown,unknown,unknown,unknown
+44,45,heightAboveGroundLayer,5000,199,Specified height level above ground,Specified height level above ground,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+45,46,heightAboveGroundLayer,5000,200,Specified height level above ground,Specified height level above ground,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+46,47,heightAboveGroundLayer,2000,199,Specified height level above ground,Specified height level above ground,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+47,48,heightAboveGroundLayer,2000,200,Specified height level above ground,Specified height level above ground,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+48,49,heightAboveGroundLayer,3000,199,Specified height level above ground,Specified height level above ground,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+49,50,heightAboveGroundLayer,3000,200,Specified height level above ground,Specified height level above ground,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+50,51,heightAboveGroundLayer,2000,Relative vorticity,Specified height level above ground,Specified height level above ground,vo,vo,Vorticity (relative),Vorticity (relative),atmosphere_relative_vorticity,atmosphere_relative_vorticity,vo,vo
+51,52,heightAboveGroundLayer,1000,Relative vorticity,Specified height level above ground,Specified height level above ground,vo,vo,Vorticity (relative),Vorticity (relative),atmosphere_relative_vorticity,atmosphere_relative_vorticity,vo,vo
+52,53,atmosphere,0,Hail,Entire atmosphere,Missing,hail,hail,Hail,Hail,unknown,unknown,hail,hail
+53,54,sigma,0,Hail,Sigma level,Missing,hail,hail,Hail,Hail,unknown,unknown,hail,hail
+54,55,surface,0,Hail,Ground or water surface,Missing,hail,hail,Hail,Hail,unknown,unknown,hail,hail
+55,56,atmosphereSingleLayer,0,74,Entire atmosphere,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+56,57,heightAboveGround,1,1,Specified height level above ground,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+57,58,heightAboveGround,2,1,Specified height level above ground,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+58,59,atmosphere,0,192,Entire atmosphere,Missing,unknown,ltng,unknown,Lightning,unknown,unknown,unknown,unknown
+59,60,heightAboveGround,80,u-component of wind,Specified height level above ground,Missing,u,u,U component of wind,U component of wind,eastward_wind,eastward_wind,u,u
+60,61,heightAboveGround,80,v-component of wind,Specified height level above ground,Missing,v,v,V component of wind,V component of wind,northward_wind,northward_wind,v,v
+61,62,surface,0,Pressure,Ground or water surface,Missing,sp,sp,Surface pressure,Surface pressure,surface_air_pressure,surface_air_pressure,sp,sp
+62,63,surface,0,Geopotential height,Ground or water surface,Missing,orog,orog,Orography,Orography,geopotential_height,geopotential_height,orog,orog
+63,64,surface,0,Temperature,Ground or water surface,Missing,t,t,Temperature,Temperature,air_temperature,air_temperature,t,t
+64,65,surface,0,Total snowfall,Ground or water surface,Missing,asnow,asnow,Total snowfall,Total snowfall,unknown,unknown,asnow,asnow
+65,66,depthBelowLand,0,194,Depth below land surface,Missing,unknown,mstav,unknown,Moisture availability,unknown,unknown,unknown,unknown
+66,67,surface,0,Plant canopy surface water,Ground or water surface,Missing,cnwat,cnwat,Plant canopy surface water,Plant canopy surface water,unknown,unknown,cnwat,cnwat
+67,68,surface,0,Water equivalent of accumulated snow depth,Ground or water surface,Missing,sdwe,sdwe,Water equivalent of accumulated snow depth (deprecated),Water equivalent of accumulated snow depth (deprecated),unknown,unknown,sdwe,sdwe
+68,69,surface,0,Snow cover,Ground or water surface,Missing,snowc,snowc,Snow cover,Snow cover,unknown,unknown,snowc,snowc
+69,70,surface,0,Snow depth,Ground or water surface,Missing,sde,sde,Snow depth,Snow depth,lwe_thickness_of_surface_snow_amount,lwe_thickness_of_surface_snow_amount,sde,sde
+70,71,heightAboveGround,2,Temperature,Specified height level above ground,Missing,2t,2t,2 metre temperature,2 metre temperature,air_temperature,air_temperature,t2m,t2m
+71,72,heightAboveGround,2,Potential temperature,Specified height level above ground,Missing,pt,pt,Potential temperature,Potential temperature,unknown,unknown,pt,pt
+72,73,heightAboveGround,2,Specific humidity,Specified height level above ground,Missing,2sh,2sh,2 metre specific humidity,2 metre specific humidity,specific_humidity,specific_humidity,sh2,sh2
+73,74,heightAboveGround,2,Dew point temperature,Specified height level above ground,Missing,2d,2d,2 metre dewpoint temperature,2 metre dewpoint temperature,unknown,unknown,d2m,d2m
+74,75,heightAboveGround,2,Relative humidity,Specified height level above ground,Missing,2r,2r,2 metre relative humidity,2 metre relative humidity,relative_humidity,relative_humidity,r2,r2
+75,76,heightAboveGround,8,Mass density,Specified height level above ground,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+76,77,heightAboveGround,10,u-component of wind,Specified height level above ground,Missing,10u,10u,10 metre U wind component,10 metre U wind component,eastward_wind,eastward_wind,u10,u10
+77,78,heightAboveGround,10,v-component of wind,Specified height level above ground,Missing,10v,10v,10 metre V wind component,10 metre V wind component,northward_wind,northward_wind,v10,v10
+78,79,heightAboveGround,10,Wind speed,Specified height level above ground,Missing,10si,10si,10 metre wind speed,10 metre wind speed,unknown,unknown,si10,si10
+79,80,heightAboveGround,10,222,Specified height level above ground,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+80,81,heightAboveGround,10,223,Specified height level above ground,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+81,82,surface,0,Percent frozen precipitation,Ground or water surface,Missing,cpofp,cpofp,Percent frozen precipitation,Percent frozen precipitation,unknown,unknown,cpofp,cpofp
+82,83,surface,0,Precipitation rate,Ground or water surface,Missing,prate,prate,Precipitation rate,Precipitation rate,unknown,unknown,prate,prate
+83,84,surface,0,Total precipitation,Ground or water surface,Missing,unknown,tp,unknown,Total Precipitation,unknown,unknown,unknown,unknown
+84,85,surface,0,Water equivalent of accumulated snow depth,Ground or water surface,Missing,sdwe,sdwe,Water equivalent of accumulated snow depth (deprecated),Water equivalent of accumulated snow depth (deprecated),unknown,unknown,sdwe,sdwe
+85,86,surface,0,227,Ground or water surface,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+86,87,surface,0,225,Ground or water surface,Missing,unknown,frzr,unknown,Freezing Rain,unknown,unknown,unknown,unknown
+87,88,surface,0,Storm surface runoff,Ground or water surface,Missing,ssrun,ssrun,Storm surface runoff,Storm surface runoff,unknown,unknown,ssrun,ssrun
+88,89,surface,0,Baseflow-groundwater runoff,Ground or water surface,Missing,bgrun,bgrun,Baseflow-groundwater runoff,Baseflow-groundwater runoff,unknown,unknown,bgrun,bgrun
+89,90,surface,0,Categorical snow,Ground or water surface,Missing,csnow,csnow,Categorical snow,Categorical snow,unknown,unknown,csnow,csnow
+90,91,surface,0,Categorical ice pellets,Ground or water surface,Missing,cicep,cicep,Categorical ice pellets,Categorical ice pellets,unknown,unknown,cicep,cicep
+91,92,surface,0,Categorical freezing rain,Ground or water surface,Missing,cfrzr,cfrzr,Categorical freezing rain,Categorical freezing rain,unknown,unknown,cfrzr,cfrzr
+92,93,surface,0,Categorical rain,Ground or water surface,Missing,crain,crain,Categorical rain,Categorical rain,unknown,unknown,crain,crain
+93,94,surface,0,Surface roughness,Ground or water surface,Missing,sr,sr,Surface roughness,Surface roughness,surface_roughness_length,surface_roughness_length,sr,sr
+94,95,surface,0,Frictional velocity,Ground or water surface,Missing,fricv,fricv,Frictional velocity,Frictional velocity,unknown,unknown,fricv,fricv
+95,96,surface,0,Sensible heat net flux,Ground or water surface,Missing,shtfl,shtfl,Sensible heat net flux,Sensible heat net flux,unknown,unknown,shtfl,shtfl
+96,97,surface,0,Latent heat net flux,Ground or water surface,Missing,lhtfl,lhtfl,Latent heat net flux,Latent heat net flux,unknown,unknown,lhtfl,lhtfl
+97,98,surface,0,Vegetation,Ground or water surface,Missing,veg,veg,Vegetation,Vegetation,unknown,unknown,veg,veg
+98,99,surface,0,231,Ground or water surface,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+99,100,surface,0,232,Ground or water surface,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+100,101,surface,0,198,Ground or water surface,Missing,unknown,lai,unknown,Leaf Area Index,unknown,unknown,unknown,unknown
+101,102,surface,0,Ground heat flux,Ground or water surface,Missing,gflux,gflux,Ground heat flux,Ground heat flux,unknown,unknown,gflux,gflux
+102,103,surface,0,198,Ground or water surface,Missing,gppbfas,vgtyp,GPP coefficient from Biogenic Flux Adjustment System,Vegetation Type,unknown,unknown,gppbfas,gppbfas
+103,104,isobaricLayer,500,Surface lifted index,Isobaric surface,Isobaric surface,lftx,lftx,Surface lifted index,Surface lifted index,unknown,unknown,lftx,lftx
+104,105,surface,0,Convective available potential energy,Ground or water surface,Missing,unknown,cape,unknown,Convective available potential energy,unknown,unknown,unknown,unknown
+105,106,surface,0,Convective inhibition,Ground or water surface,Missing,unknown,cin,unknown,Convective inhibition,unknown,unknown,unknown,unknown
+106,107,atmosphereSingleLayer,0,Precipitable water,Entire atmosphere,Missing,pwat,pwat,Precipitable water,Precipitable water,unknown,unknown,pwat,pwat
+107,108,atmosphereSingleLayer,0,102,Entire atmosphere,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+108,109,atmosphereSingleLayer,0,Total column,Entire atmosphere,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+109,110,atmosphere,0,Total column-integrated cloud water,Entire atmosphere,Missing,tcolw,tcolw,Total column-integrated cloud water,Total column-integrated cloud water,unknown,unknown,tcolw,tcolw
+110,111,atmosphere,0,Total column-integrated cloud ice,Entire atmosphere,Missing,tcoli,tcoli,Total column-integrated cloud ice,Total column-integrated cloud ice,unknown,unknown,tcoli,tcoli
+111,112,boundaryLayerCloudLayer,0,Total cloud cover,Boundary layer cloud layer,Missing,unknown,tcc,unknown,Total Cloud Cover,unknown,unknown,unknown,unknown
+112,113,lowCloudLayer,0,Low cloud cover,Low cloud layer,Missing,lcc,lcc,Low cloud cover,Low cloud cover,unknown,unknown,lcc,lcc
+113,114,middleCloudLayer,0,Medium cloud cover,Middle cloud layer,Missing,mcc,mcc,Medium cloud cover,Medium cloud cover,unknown,unknown,mcc,mcc
+114,115,highCloudLayer,0,High cloud cover,High cloud layer,Missing,hcc,hcc,High cloud cover,High cloud cover,unknown,unknown,hcc,hcc
+115,116,atmosphere,0,Total cloud cover,Entire atmosphere,Missing,unknown,tcc,unknown,Total Cloud Cover,unknown,unknown,unknown,unknown
+116,117,cloudCeiling,0,Geopotential height,Cloud ceiling,Missing,gh,gh,Geopotential Height,Geopotential Height,geopotential_height,geopotential_height,gh,gh
+117,118,cloudBase,0,Geopotential height,Cloud base level,Missing,gh,gh,Geopotential Height,Geopotential Height,geopotential_height,geopotential_height,gh,gh
+118,119,cloudBase,0,Pressure,Cloud base level,Missing,pres,pres,Pressure,Pressure,unknown,unknown,pres,pres
+119,120,cloudTop,0,Pressure,Level of cloud tops,Missing,pres,pres,Pressure,Pressure,unknown,unknown,pres,pres
+120,121,cloudTop,0,Geopotential height,Level of cloud tops,Missing,gh,gh,Geopotential Height,Geopotential Height,geopotential_height,geopotential_height,gh,gh
+121,122,nominalTop,0,Upward long-wave radiation flux,Nominal top of the atmosphere,Missing,ulwrf,ulwrf,Upward long-wave radiation flux,Upward long-wave radiation flux,unknown,unknown,ulwrf,ulwrf
+122,123,surface,0,Downward short-wave radiation flux,Ground or water surface,Missing,dswrf,dswrf,Downward short-wave radiation flux,Downward short-wave radiation flux,unknown,unknown,dswrf,dswrf
+123,124,surface,0,Downward long-wave radiation flux,Ground or water surface,Missing,dlwrf,dlwrf,Downward long-wave radiation flux,Downward long-wave radiation flux,unknown,unknown,dlwrf,dlwrf
+124,125,surface,0,8,Ground or water surface,Missing,uswrf,uswrf,Upward short-wave radiation flux,Upward short-wave radiation flux,unknown,unknown,uswrf,uswrf
+125,126,surface,0,Upward long-wave radiation flux,Ground or water surface,Missing,ulwrf,ulwrf,Upward long-wave radiation flux,Upward long-wave radiation flux,unknown,unknown,ulwrf,ulwrf
+126,127,surface,0,199,Ground or water surface,Missing,unknown,cfnsf,unknown,Cloud Forcing Net Solar Flux,unknown,unknown,unknown,unknown
+127,128,surface,0,200,Ground or water surface,Missing,unknown,vbdsf,unknown,Visible Beam Downward Solar Flux,unknown,unknown,unknown,unknown
+128,129,surface,0,201,Ground or water surface,Missing,unknown,vddsf,unknown,Visible Diffuse Downward Solar Flux,unknown,unknown,unknown,unknown
+129,130,nominalTop,0,8,Nominal top of the atmosphere,Missing,uswrf,uswrf,Upward short-wave radiation flux,Upward short-wave radiation flux,unknown,unknown,uswrf,uswrf
+130,131,heightAboveGroundLayer,3000,Storm relative helicity,Specified height level above ground,Specified height level above ground,hlcy,hlcy,Storm relative helicity,Storm relative helicity,unknown,unknown,hlcy,hlcy
+131,132,heightAboveGroundLayer,1000,Storm relative helicity,Specified height level above ground,Specified height level above ground,hlcy,hlcy,Storm relative helicity,Storm relative helicity,unknown,unknown,hlcy,hlcy
+132,133,heightAboveGroundLayer,0,U-component storm motion,Specified height level above ground,Specified height level above ground,ustm,ustm,U-component storm motion,U-component storm motion,unknown,unknown,ustm,ustm
+133,134,heightAboveGroundLayer,0,V-component storm motion,Specified height level above ground,Specified height level above ground,vstm,vstm,V-component storm motion,V-component storm motion,unknown,unknown,vstm,vstm
+134,135,heightAboveGroundLayer,0,Vertical u-component shear,Specified height level above ground,Specified height level above ground,vucsh,vucsh,Vertical u-component shear,Vertical u-component shear,unknown,unknown,vucsh,vucsh
+135,136,heightAboveGroundLayer,0,Vertical v-component shear,Specified height level above ground,Specified height level above ground,vvcsh,vvcsh,Vertical v-component shear,Vertical v-component shear,unknown,unknown,vvcsh,vvcsh
+136,137,heightAboveGroundLayer,0,Vertical u-component shear,Specified height level above ground,Specified height level above ground,vucsh,vucsh,Vertical u-component shear,Vertical u-component shear,unknown,unknown,vucsh,vucsh
+137,138,heightAboveGroundLayer,0,Vertical v-component shear,Specified height level above ground,Specified height level above ground,vvcsh,vvcsh,Vertical v-component shear,Vertical v-component shear,unknown,unknown,vvcsh,vvcsh
+138,139,isothermZero,0,Geopotential height,Level of 0o C isotherm,Missing,gh,gh,Geopotential Height,Geopotential Height,geopotential_height,geopotential_height,gh,gh
+139,140,isothermZero,0,Relative humidity,Level of 0o C isotherm,Missing,r,r,Relative humidity,Relative humidity,relative_humidity,relative_humidity,r,r
+140,141,isothermZero,0,Pressure,Level of 0o C isotherm,Missing,pres,pres,Pressure,Pressure,unknown,unknown,pres,pres
+141,142,highestTroposphericFreezing,0,Geopotential height,Highest tropospheric freezing level,Missing,gh,gh,Geopotential Height,Geopotential Height,geopotential_height,geopotential_height,gh,gh
+142,143,highestTroposphericFreezing,0,Relative humidity,Highest tropospheric freezing level,Missing,r,r,Relative humidity,Relative humidity,relative_humidity,relative_humidity,r,r
+143,144,highestTroposphericFreezing,0,Pressure,Highest tropospheric freezing level,Missing,pres,pres,Pressure,Pressure,unknown,unknown,pres,pres
+144,145,isothermal,263,Geopotential height,Isothermal level,Missing,gh,gh,Geopotential Height,Geopotential Height,geopotential_height,geopotential_height,gh,gh
+145,146,isothermal,253,Geopotential height,Isothermal level,Missing,gh,gh,Geopotential Height,Geopotential Height,geopotential_height,geopotential_height,gh,gh
+146,147,pressureFromGroundLayer,18000,193,Level at specified pressure difference from ground to level,Level at specified pressure difference from ground to level,unknown,4lftx,unknown,Best (4-layer) lifted index,unknown,unknown,unknown,unknown
+147,148,pressureFromGroundLayer,18000,Convective available potential energy,Level at specified pressure difference from ground to level,Level at specified pressure difference from ground to level,unknown,cape,unknown,Convective available potential energy,unknown,unknown,unknown,unknown
+148,149,pressureFromGroundLayer,18000,Convective inhibition,Level at specified pressure difference from ground to level,Level at specified pressure difference from ground to level,unknown,cin,unknown,Convective inhibition,unknown,unknown,unknown,unknown
+149,150,surface,0,Planetary boundary layer height,Ground or water surface,Missing,hpbl,hpbl,Planetary boundary layer height,Planetary boundary layer height,unknown,unknown,hpbl,hpbl
+150,151,adiabaticCondensation,0,Geopotential height,Level of adiabatic condensation lifted from the surface,Missing,gh,gh,Geopotential Height,Geopotential Height,geopotential_height,geopotential_height,gh,gh
+151,152,pressureFromGroundLayer,9000,Convective available potential energy,Level at specified pressure difference from ground to level,Level at specified pressure difference from ground to level,unknown,cape,unknown,Convective available potential energy,unknown,unknown,unknown,unknown
+152,153,pressureFromGroundLayer,9000,Convective inhibition,Level at specified pressure difference from ground to level,Level at specified pressure difference from ground to level,unknown,cin,unknown,Convective inhibition,unknown,unknown,unknown,unknown
+153,154,pressureFromGroundLayer,25500,Convective available potential energy,Level at specified pressure difference from ground to level,Level at specified pressure difference from ground to level,unknown,cape,unknown,Convective available potential energy,unknown,unknown,unknown,unknown
+154,155,pressureFromGroundLayer,25500,Convective inhibition,Level at specified pressure difference from ground to level,Level at specified pressure difference from ground to level,unknown,cin,unknown,Convective inhibition,unknown,unknown,unknown,unknown
+155,156,equilibrium,0,Geopotential height,Equilibrium level,Missing,gh,gh,Geopotential Height,Geopotential Height,geopotential_height,geopotential_height,gh,gh
+156,157,pressureFromGroundLayer,25500,200,Level at specified pressure difference from ground to level,Level at specified pressure difference from ground to level,unknown,plpl,unknown,Pressure of level from which parcel was lifted,unknown,unknown,unknown,unknown
+157,158,heightAboveGroundLayer,0,Convective available potential energy,Specified height level above ground,Specified height level above ground,unknown,cape,unknown,Convective available potential energy,unknown,unknown,unknown,unknown
+158,159,unknown,0,Geopotential height,Missing,Missing,gh,gh,Geopotential Height,Geopotential Height,geopotential_height,geopotential_height,gh,gh
+159,160,surface,0,204,Ground or water surface,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+160,161,heightAboveGroundLayer,0,206,Specified height level above ground,Specified height level above ground,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+161,162,unknown,261,205,Isothermal level,Isothermal level,unknown,layth,unknown,Layer Thickness,unknown,unknown,unknown,unknown
+162,163,heightAboveGroundLayer,0,205,Specified height level above ground,Specified height level above ground,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+163,164,atmosphere,0,242,Entire atmosphere,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+164,165,surface,0,"Land cover (0=land, 1=sea)",Ground or water surface,Missing,lsm,lsm,Land-sea mask,Land-sea mask,land_binary_mask,land_binary_mask,lsm,lsm
+165,166,surface,0,Ice cover,Ground or water surface,Missing,ci,ci,Sea ice area fraction,Sea ice area fraction,sea_ice_area_fraction,sea_ice_area_fraction,siconc,siconc
+166,167,nominalTop,0,1,Nominal top of the atmosphere,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+167,168,nominalTop,0,2,Nominal top of the atmosphere,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+168,169,nominalTop,0,7,Nominal top of the atmosphere,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+169,170,nominalTop,0,8,Nominal top of the atmosphere,Missing,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
