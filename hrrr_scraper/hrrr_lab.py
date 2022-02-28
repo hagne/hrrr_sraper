@@ -477,7 +477,7 @@ class Concatonator(object):
                 fc_list = []
                 for frcst_cycle, fc_group in date_group.groupby('frcst_cycle'):
 #                     print(frcst_cycle)
-                    fc_list.append(xr.open_mfdataset(fc_group.path2scraped_files, concat_dim='forecast_hour'))
+                    fc_list.append(xr.open_mfdataset(fc_group.path2scraped_files))#, concat_dim='forecast_hour')) # there must have been a change in xarray, that it did not want the concat_dim anymore?!?
 
                 try:
                     ds = xr.concat(fc_list, dim = 'datetime')

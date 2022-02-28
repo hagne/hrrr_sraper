@@ -1,0 +1,1631 @@
+ Copyright (C) 1995-2018 - All Rights Reserved
+ University Corporation for Atmospheric Research
+ NCAR Command Language Version 6.5.0
+ The use of this software is governed by a License Agreement.
+ See http://www.ncl.ucar.edu/ for more details.
+warning: Entry (231) not found in code table file /apps/ncl/CentOS7.5_64bit_gnu485/lib/ncarg/grib2_codetables/ncep/4/4.2.2.0.table
+warning: Entry (232) not found in code table file /apps/ncl/CentOS7.5_64bit_gnu485/lib/ncarg/grib2_codetables/ncep/4/4.2.2.0.table
+
+Variable: f
+Type: file
+filename:	ncep_rap_3d.2133506000000
+path:	ncep_rap_3d.2133506000000.grib2
+   file global attributes:
+   dimensions:
+      ygrid_0 = 834
+      xgrid_0 = 953
+      lv_HYBL0 = 50
+      lv_DBLL1 = 9
+   variables:
+      float TMP_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Temperature
+         units :	K
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Temperature
+         parameter_template_discipline_category_number :	( 0, 0, 0, 0 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float TMP_P0_L3_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Temperature
+         units :	K
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Temperature
+         parameter_template_discipline_category_number :	( 0, 0, 0, 0 )
+         level_type :	Level of cloud tops
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float TMP_P0_L103_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Temperature
+         units :	K
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Temperature
+         parameter_template_discipline_category_number :	( 0, 0, 0, 0 )
+         level_type :	Specified height level above ground (m)
+         level :	 2
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float TMP_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Temperature
+         units :	K
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Temperature
+         parameter_template_discipline_category_number :	( 0, 0, 0, 0 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float POT_P0_L7_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Potential temperature
+         units :	K
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Temperature
+         parameter_template_discipline_category_number :	( 0, 0, 0, 2 )
+         level_type :	Tropopause
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float DPT_P0_L103_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Dew point temperature
+         units :	K
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Temperature
+         parameter_template_discipline_category_number :	( 0, 0, 0, 6 )
+         level_type :	Specified height level above ground (m)
+         level :	 2
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float LHTFL_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Latent heat net flux
+         units :	W m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Temperature
+         parameter_template_discipline_category_number :	( 0, 0, 0, 10 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float SHTFL_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Sensible heat net flux
+         units :	W m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Temperature
+         parameter_template_discipline_category_number :	( 0, 0, 0, 11 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float SPFH_P0_L103_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Specific humidity
+         units :	kg kg-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 0 )
+         level_type :	Specified height level above ground (m)
+         level :	 2
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float SPFH_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Specific humidity
+         units :	kg kg-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 0 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float PWAT_P0_L200_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Precipitable water
+         units :	kg m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 3 )
+         level_type :	Entire atmosphere (considered as a single layer)
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float PRATE_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Precipitation rate
+         units :	kg m-2 s-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 7 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float SNOD_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Snow depth
+         units :	m
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 11 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float WEASD_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Water equivalent of accumulated snow depth
+         units :	kg m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 13 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float CLWMR_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Cloud mixing ratio
+         units :	kg kg-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 22 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float RWMR_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Rain mixing ratio
+         units :	kg kg-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 24 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float SNMR_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Snow mixing ratio
+         units :	kg kg-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 25 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float GRLE_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Graupel
+         units :	kg kg-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 32 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float CIMIXR_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Cloud ice mixing ratio
+         units :	kg kg-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 82 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float SPNCR_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Specific number concentration of rain
+         units :	kg-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 100 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float CRAIN_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Categorical rain (yes=1; no=0)
+         units :	non-dim
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 192 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float CFRZR_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Categorical freezing rain (yes=1; no=0)
+         units :	non-dim
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 193 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float CICEP_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Categorical ice pellets (yes=1; no=0)
+         units :	non-dim
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 194 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float CSNOW_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Categorical snow (yes=1; no=0)
+         units :	non-dim
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 0, 0, 1, 195 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float UGRD_P0_L7_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	U-component of wind
+         units :	m s-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Momentum
+         parameter_template_discipline_category_number :	( 0, 0, 2, 2 )
+         level_type :	Tropopause
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float UGRD_P0_L103_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	U-component of wind
+         units :	m s-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Momentum
+         parameter_template_discipline_category_number :	( 0, 0, 2, 2 )
+         level_type :	Specified height level above ground (m)
+         level :	10
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float UGRD_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	U-component of wind
+         units :	m s-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Momentum
+         parameter_template_discipline_category_number :	( 0, 0, 2, 2 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float VGRD_P0_L7_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	V-component of wind
+         units :	m s-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Momentum
+         parameter_template_discipline_category_number :	( 0, 0, 2, 3 )
+         level_type :	Tropopause
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float VGRD_P0_L103_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	V-component of wind
+         units :	m s-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Momentum
+         parameter_template_discipline_category_number :	( 0, 0, 2, 3 )
+         level_type :	Specified height level above ground (m)
+         level :	10
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float VGRD_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	V-component of wind
+         units :	m s-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Momentum
+         parameter_template_discipline_category_number :	( 0, 0, 2, 3 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float VVEL_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Vertical velocity (pressure)
+         units :	Pa s-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Momentum
+         parameter_template_discipline_category_number :	( 0, 0, 2, 8 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float GUST_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Wind speed (gust)
+         units :	m s-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Momentum
+         parameter_template_discipline_category_number :	( 0, 0, 2, 22 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float FRICV_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Frictional velocity
+         units :	m s-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Momentum
+         parameter_template_discipline_category_number :	( 0, 0, 2, 30 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float PRES_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Pressure
+         units :	Pa
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Mass
+         parameter_template_discipline_category_number :	( 0, 0, 3, 0 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float PRES_P0_L2_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Pressure
+         units :	Pa
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Mass
+         parameter_template_discipline_category_number :	( 0, 0, 3, 0 )
+         level_type :	Cloud base level
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float PRES_P0_L3_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Pressure
+         units :	Pa
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Mass
+         parameter_template_discipline_category_number :	( 0, 0, 3, 0 )
+         level_type :	Level of cloud tops
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float PRES_P0_L7_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Pressure
+         units :	Pa
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Mass
+         parameter_template_discipline_category_number :	( 0, 0, 3, 0 )
+         level_type :	Tropopause
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float PRES_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Pressure
+         units :	Pa
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Mass
+         parameter_template_discipline_category_number :	( 0, 0, 3, 0 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float HGT_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Geopotential height
+         units :	gpm
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Mass
+         parameter_template_discipline_category_number :	( 0, 0, 3, 5 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float HGT_P0_L2_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Geopotential height
+         units :	gpm
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Mass
+         parameter_template_discipline_category_number :	( 0, 0, 3, 5 )
+         level_type :	Cloud base level
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float HGT_P0_L3_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Geopotential height
+         units :	gpm
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Mass
+         parameter_template_discipline_category_number :	( 0, 0, 3, 5 )
+         level_type :	Level of cloud tops
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float HGT_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Geopotential height
+         units :	gpm
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Mass
+         parameter_template_discipline_category_number :	( 0, 0, 3, 5 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float HGT_P0_L215_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Geopotential height
+         units :	gpm
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Mass
+         parameter_template_discipline_category_number :	( 0, 0, 3, 5 )
+         level_type :	Cloud ceiling
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float HGT_P0_L245_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Geopotential height
+         units :	gpm
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Mass
+         parameter_template_discipline_category_number :	( 0, 0, 3, 5 )
+         level_type :	Lowest level of the wet bulb zero
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float HPBL_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Planetary boundary layer height
+         units :	m
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Mass
+         parameter_template_discipline_category_number :	( 0, 0, 3, 196 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float MSLMA_P0_L101_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	MSLP (MAPS system reduction)
+         units :	Pa
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Mass
+         parameter_template_discipline_category_number :	( 0, 0, 3, 198 )
+         level_type :	Mean sea level (Pa)
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float DSWRF_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Downward short-wave radiation flux
+         units :	W m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Short wave radiation
+         parameter_template_discipline_category_number :	( 0, 0, 4, 7 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float USWRF_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Upward short-wave radiation flux
+         units :	W m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Short wave radiation
+         parameter_template_discipline_category_number :	( 0, 0, 4, 8 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float USWRF_P0_L8_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Upward short-wave radiation flux
+         units :	W m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Short wave radiation
+         parameter_template_discipline_category_number :	( 0, 0, 4, 8 )
+         level_type :	Nominal top of the atmosphere
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float CFNSF_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Cloud forcing net solar flux
+         units :	W m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Short wave radiation
+         parameter_template_discipline_category_number :	( 0, 0, 4, 199 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float VBDSF_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Visible beam downward solar flux
+         units :	W m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Short wave radiation
+         parameter_template_discipline_category_number :	( 0, 0, 4, 200 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float VDDSF_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Visible diffuse downward solar flux
+         units :	W m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Short wave radiation
+         parameter_template_discipline_category_number :	( 0, 0, 4, 201 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float DLWRF_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Downward long-wave rad. flux
+         units :	W m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Long wave radiation
+         parameter_template_discipline_category_number :	( 0, 0, 5, 3 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float ULWRF_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Upward long-wave rad. flux
+         units :	W m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Long wave radiation
+         parameter_template_discipline_category_number :	( 0, 0, 5, 4 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float ULWRF_P0_L8_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Upward long-wave rad. flux
+         units :	W m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Long wave radiation
+         parameter_template_discipline_category_number :	( 0, 0, 5, 4 )
+         level_type :	Nominal top of the atmosphere
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float TCDC_P0_L10_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Total cloud cover
+         units :	%
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Cloud
+         parameter_template_discipline_category_number :	( 0, 0, 6, 1 )
+         level_type :	Entire Atmosphere
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float LCDC_P0_L214_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Low cloud cover
+         units :	%
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Cloud
+         parameter_template_discipline_category_number :	( 0, 0, 6, 3 )
+         level_type :	Low cloud layer
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float MCDC_P0_L224_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Medium cloud cover
+         units :	%
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Cloud
+         parameter_template_discipline_category_number :	( 0, 0, 6, 4 )
+         level_type :	Middle cloud layer
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float HCDC_P0_L234_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	High cloud cover
+         units :	%
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Cloud
+         parameter_template_discipline_category_number :	( 0, 0, 6, 5 )
+         level_type :	High cloud layer
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float TCOLW_P0_L10_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Total column-integrated cloud water
+         units :	kg m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Cloud
+         parameter_template_discipline_category_number :	( 0, 0, 6, 18 )
+         level_type :	Entire Atmosphere
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float TCOLI_P0_L10_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Total column-integrated cloud ice
+         units :	kg m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Cloud
+         parameter_template_discipline_category_number :	( 0, 0, 6, 19 )
+         level_type :	Entire Atmosphere
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float NCONCD_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Number concentration of cloud droplets
+         units :	kg-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Cloud
+         parameter_template_discipline_category_number :	( 0, 0, 6, 28 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float NCCICE_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Number concentration of cloud ice
+         units :	kg-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Cloud
+         parameter_template_discipline_category_number :	( 0, 0, 6, 29 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float FRACCC_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Fraction of cloud cover
+         units :	Numeric
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Cloud
+         parameter_template_discipline_category_number :	( 0, 0, 6, 32 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float CAPE_P0_2L108_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Convective available potential energy
+         units :	J kg-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Thermodynamic stability indices
+         parameter_template_discipline_category_number :	( 0, 0, 7, 6 )
+         level_type :	Level at specified pressure difference from ground to level (Pa)
+         level :	( 25500,  0 )
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float CIN_P0_2L108_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Convective inhibition
+         units :	J kg-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Thermodynamic stability indices
+         parameter_template_discipline_category_number :	( 0, 0, 7, 7 )
+         level_type :	Level at specified pressure difference from ground to level (Pa)
+         level :	( 25500,  0 )
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float 4LFTX_P0_2L108_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Best (4 layer) lifted index
+         units :	K
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Thermodynamic stability indices
+         parameter_template_discipline_category_number :	( 0, 0, 7, 193 )
+         level_type :	Level at specified pressure difference from ground to level (Pa)
+         level :	( 18000,  0 )
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float LAI_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Leaf area index
+         units :	Numeric
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Thermodynamic stability indices
+         parameter_template_discipline_category_number :	( 0, 0, 7, 198 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float PMTC_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Particulate matter (coarse)
+         units :	mcg m-3
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Aerosols
+         parameter_template_discipline_category_number :	( 0, 0, 13, 192 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float PMTF_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Particulate matter (fine)
+         units :	mcg m-3
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Aerosols
+         parameter_template_discipline_category_number :	( 0, 0, 13, 193 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float REFC_P0_L10_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Composite reflectivity
+         units :	dB
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Forecast radar imagery
+         parameter_template_discipline_category_number :	( 0, 0, 16, 196 )
+         level_type :	Entire Atmosphere
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float LTNG_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Lightning
+         units :	non-dim
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Electrodynamics
+         parameter_template_discipline_category_number :	( 0, 0, 17, 192 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float VIS_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Visibility
+         units :	m
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Physical atmospheric properties
+         parameter_template_discipline_category_number :	( 0, 0, 19, 0 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float TKE_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Turbulent kinetic energy
+         units :	J kg-1
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Physical atmospheric properties
+         parameter_template_discipline_category_number :	( 0, 0, 19, 11 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float MASSDEN_P0_L103_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Mass density (concentration)
+         units :	kg m-3
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Atmospheric chemical constituents
+         parameter_template_discipline_category_number :	( 0, 0, 20, 0 )
+         level_type :	Specified height level above ground (m)
+         level :	 8
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float MASSDEN_P0_L105_GRLL0 ( lv_HYBL0, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Mass density (concentration)
+         units :	kg m-3
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Atmospheric chemical constituents
+         parameter_template_discipline_category_number :	( 0, 0, 20, 0 )
+         level_type :	Hybrid level
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float COLMD_P0_L200_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Column-integrated mass density
+         units :	kg m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Atmospheric chemical constituents
+         parameter_template_discipline_category_number :	( 0, 0, 20, 1 )
+         level_type :	Entire atmosphere (considered as a single layer)
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float AOTK_P0_L200_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Aerosol optical thickness
+         units :	Numeric
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Atmospheric chemical constituents
+         parameter_template_discipline_category_number :	( 0, 0, 20, 102 )
+         level_type :	Entire atmosphere (considered as a single layer)
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float LAND_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Land cover (1=land, 0=sea)
+         units :	Proportion
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Land surface products, Vegetation/biomass
+         parameter_template_discipline_category_number :	( 0, 2, 0, 0 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float SFCR_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Surface roughness
+         units :	m
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Land surface products, Vegetation/biomass
+         parameter_template_discipline_category_number :	( 0, 2, 0, 1 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float TSOIL_P0_2L106_GRLL0 ( lv_DBLL1, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Soil temperature
+         units :	K
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Land surface products, Vegetation/biomass
+         parameter_template_discipline_category_number :	( 0, 2, 0, 2 )
+         level_type :	Depth below land surface (m)
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float VEG_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Vegetation
+         units :	%
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Land surface products, Vegetation/biomass
+         parameter_template_discipline_category_number :	( 0, 2, 0, 4 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float GFLUX_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Ground heat flux
+         units :	W m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Land surface products, Vegetation/biomass
+         parameter_template_discipline_category_number :	( 0, 2, 0, 10 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float CNWAT_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Plant canopy surface water
+         units :	kg m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Land surface products, Vegetation/biomass
+         parameter_template_discipline_category_number :	( 0, 2, 0, 13 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float SOILW_P0_2L106_GRLL0 ( lv_DBLL1, ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Volumetric soil moisture content
+         units :	Fraction
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Land surface products, Vegetation/biomass
+         parameter_template_discipline_category_number :	( 0, 2, 0, 192 )
+         level_type :	Depth below land surface (m)
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float VGTYP_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Vegetation type
+         units :	Integer (0-13)
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Land surface products, Vegetation/biomass
+         parameter_template_discipline_category_number :	( 0, 2, 0, 198 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float VAR_2_0_231_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	unknown variable name
+         units :	unknown
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Land surface products, Vegetation/biomass
+         parameter_template_discipline_category_number :	( 0, 2, 0, 231 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float VAR_2_0_232_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	unknown variable name
+         units :	unknown
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Land surface products, Vegetation/biomass
+         parameter_template_discipline_category_number :	( 0, 2, 0, 232 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float SOTYP_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Soil type
+         units :	Code Table 4.213
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Land surface products, Soil products
+         parameter_template_discipline_category_number :	( 0, 2, 3, 0 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float ICEC_P0_L1_GRLL0 ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Ice cover
+         units :	Proportion
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Oceanographic products, Ice
+         parameter_template_discipline_category_number :	( 0, 10, 2, 0 )
+         level_type :	Ground or water surface
+         level :	 0
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float APCP_P8_L1_GRLL0_acc ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Total precipitation
+         units :	kg m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 8, 0, 1, 8 )
+         level_type :	Ground or water surface
+         level :	 0
+         type_of_statistical_processing :	Accumulation
+         statistical_process_duration :	initial time to forecast time
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float ACPCP_P8_L1_GRLL0_acc ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Convective precipitation
+         units :	kg m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 8, 0, 1, 10 )
+         level_type :	Ground or water surface
+         level :	 0
+         type_of_statistical_processing :	Accumulation
+         statistical_process_duration :	initial time to forecast time
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float WEASD_P8_L1_GRLL0_acc ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Water equivalent of accumulated snow depth
+         units :	kg m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 8, 0, 1, 13 )
+         level_type :	Ground or water surface
+         level :	 0
+         type_of_statistical_processing :	Accumulation
+         statistical_process_duration :	initial time to forecast time
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float ASNOW_P8_L1_GRLL0_acc ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Total snowfall
+         units :	m
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 8, 0, 1, 29 )
+         level_type :	Ground or water surface
+         level :	 0
+         type_of_statistical_processing :	Accumulation
+         statistical_process_duration :	initial time to forecast time
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float FRZR_P8_L1_GRLL0_acc ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Freezing rain
+         units :	kg m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 8, 0, 1, 225 )
+         level_type :	Ground or water surface
+         level :	 0
+         type_of_statistical_processing :	Accumulation
+         statistical_process_duration :	initial time to forecast time
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float FROZR_P8_L1_GRLL0_acc ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Frozen rain
+         units :	kg m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Meteorological products, Moisture
+         parameter_template_discipline_category_number :	( 8, 0, 1, 227 )
+         level_type :	Ground or water surface
+         level :	 0
+         type_of_statistical_processing :	Accumulation
+         statistical_process_duration :	initial time to forecast time
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float BGRUN_P8_L1_GRLL0_acc ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Baseflow-groundwater runoff
+         units :	kg m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Hydrological products, Hydrology basic products
+         parameter_template_discipline_category_number :	( 8, 1, 0, 5 )
+         level_type :	Ground or water surface
+         level :	 0
+         type_of_statistical_processing :	Accumulation
+         statistical_process_duration :	initial time to forecast time
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float SSRUN_P8_L1_GRLL0_acc ( ygrid_0, xgrid_0 )
+         center :	US National Weather Service - NCEP (WMC)
+         production_status :	Operational products
+         long_name :	Storm surface runoff
+         units :	kg m-2
+         _FillValue :	1e+20
+         coordinates :	gridlat_0 gridlon_0
+         grid_type :	Arakawa Non-E Staggered Rotated Latitude/Longitude Grid
+         parameter_discipline_and_category :	Hydrological products, Hydrology basic products
+         parameter_template_discipline_category_number :	( 8, 1, 0, 6 )
+         level_type :	Ground or water surface
+         level :	 0
+         type_of_statistical_processing :	Accumulation
+         statistical_process_duration :	initial time to forecast time
+         forecast_time :	0
+         forecast_time_units :	hours
+         initial_time :	12/01/2021 (06:00)
+
+      float lv_DBLL1_l1 ( lv_DBLL1 )
+         long_name :	Depth below land surface
+         units :	m
+
+      float lv_DBLL1_l0 ( lv_DBLL1 )
+         long_name :	Depth below land surface
+         units :	m
+
+      float lv_HYBL0 ( lv_HYBL0 )
+         long_name :	Hybrid level
+         units :	none
+
+      float gridrot_0 ( ygrid_0, xgrid_0 )
+         long_name :	vector rotation angle
+         GridType :	Arakawa Non-E Staggered rotated Latitude/Longitude Grid
+         units :	radians
+         formula_u :	Uearth = sin(rot)*Vgrid + cos(rot)*Ugrid
+         formula_v :	Vearth = cos(rot)*Vgrid - sin(rot)*Ugrid
+         note1 :	u and v components of vector quantities are resolved relative to grid
+         note2 :	apply formulas to derive u and v components relative to earth
+
+      float gridlat_0 ( ygrid_0, xgrid_0 )
+         corners :	( -10.5906, -10.5906, 46.59194, 46.59194 )
+         long_name :	latitude
+         grid_type :	Arakawa Non-E Staggered rotated Latitude/Longitude Grid
+         units :	degrees_north
+         Dj :	0.121833
+         Di :	0.1218331
+         Lo2 :	22.66102
+         La2 :	46.59194
+         CenterLon :	254
+         CenterLat :	54
+         Lo1 :	220.9142
+         La1 :	-10.5906
+
+      float gridlon_0 ( ygrid_0, xgrid_0 )
+         corners :	( -139.0858, -72.91415, 22.66102, 125.339 )
+         long_name :	longitude
+         grid_type :	Arakawa Non-E Staggered rotated Latitude/Longitude Grid
+         units :	degrees_east
+         Dj :	0.121833
+         Di :	0.1218331
+         Lo2 :	22.66102
+         La2 :	46.59194
+         CenterLon :	254
+         CenterLat :	54
+         Lo1 :	220.9142
+         La1 :	-10.5906
+
+ 
