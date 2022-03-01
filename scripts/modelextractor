@@ -11,25 +11,34 @@ import hrrr_scraper.hrrr_lab as hrrr_lab
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('input', help='Path to grib file that is to be parsed.')
-parser.add_argument('output', help='Path to file results are written to (netcdf).')
+parser.add_argument('-i','--input', help='Path to grib file that is to be parsed.')
+parser.add_argument('-o','--output', help='Path to file results are written to (netcdf).')
+parser.add_argument('-c','--config', help='Path to config file. If set -i and -o will be ignored.')
 
 args = parser.parse_args()
+#### ****Config****
+if args.config:
+    print('Under construction. ByBy.')
+    #### file precheck
+    p2conf = pl.Path(args.config)
+    assert(p2conf.is_file()), 'Config file does not exist'
 
-#### file precheck
-p2f = pl.Path(args.input)
-p2fo = pl.Path(args.output)
-assert(p2f.is_file()), 'input file does not exist'
-assert(p2fo.resolve().parent.is_dir()), 'Folder of output file path does not exist.'
-#### get sites to project on
-sitelist = [{'name': 'test', 'abb': 'tst', 'lat': 40.12498, 'lon': -105.2368}, {'name': 'test2', 'abb': 'tsz', 'lat': 41.12498, 'lon': -115.2368}]
-
-#### read grib file
-# print(p2f)
-hrrinst = hrrr_lab.open_grib_file(p2f)
-
-#### projection onto site
-hrrr_proj = hrrinst.project2sites(sitelist)
-
-#### save result
-hrrr_proj.save(p2fo)
+#### ****Input/Output****
+else:
+    #### file precheck
+    p2f = pl.Path(args.input)
+    p2fo = pl.Path(args.output)
+    assert(p2f.is_file()), 'input file does not exist'
+    assert(p2fo.resolve().parent.is_dir()), 'Folder of output file path does not exist.'
+    #### get sites to project on
+    sitelist = [{'name': 'test', 'abb': 'tst', 'lat': 40.12498, 'lon': -105.2368}, {'name': 'test2', 'abb': 'tsz', 'lat': 41.12498, 'lon': -115.2368}]
+    
+    #### read grib file
+    # print(p2f)
+    hrrinst = hrrr_lab.open_grib_file(p2f)
+    
+    #### projection onto site
+    hrrr_proj = hrrinst.project2sites(sitelist)
+    
+    #### save result
+    hrrr_proj.save(p2fo)

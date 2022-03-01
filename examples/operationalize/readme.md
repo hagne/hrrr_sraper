@@ -4,6 +4,8 @@ development.ipynb : develop the proceedure that goes into the script
 
 Todo
 ===========
+* for meeting
+    * upload init on drive
 * make settings file with site information
 * Make skript that takes args for:
     * input grib file
