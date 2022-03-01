@@ -369,8 +369,58 @@ class HrrrWrfNat(object):
         self.ds = data
     
     def project2sites(self, sites, timeit = False, vp = True):
+        """
+        Project the model output to these sites
+
+        Parameters
+        ----------
+        sites : dict, list, atmPy site and network instances
+            Site information as dictionary or list of dictionaries in following format:
+            {'name': 'Table Mountain', 'abb': 'TBL', 'lat': 40.12498, 'lon': -105.2368}.
+        timeit : TYPE, optional
+            DESCRIPTION. The default is False.
+        vp : TYPE, optional
+            DESCRIPTION. The default is True.
+
+        Raises
+        ------
+        ValueError
+            DESCRIPTION.
+
+        Returns
+        -------
+        TYPE
+            DESCRIPTION.
+
+        """
         if timeit:
             times = [time.time(),]
+         
+        def dict2site(sitedict):
+            site = type('station_manual', (),{})
+        
+            site.name = sitedict['name']
+            site.abb = sitedict['abb']
+            site.lat = sitedict['lat']
+            site.lon = sitedict['lon']
+            return site    
+        
+        if type(sites).__name__ == 'Network':
+            sites = sites.stations._stations_list
+            sitetype = 'network'
+        elif type(sites).__name__ == 'Station':
+            sites = [sites]
+            sitetype = 'station'
+        elif isinstance(sites, dict):
+            sites = [dict2site(sites),]
+            sitetype = 'manual'
+        elif isinstance(sites, list):
+            assert(np.all([isinstance(sd,dict) for sd in sites])), 'all sites need to be dicts.'
+            sites = [dict2site(sd) for sd in sites]
+            sitetype = 'manual'
+        else:
+            raise ValueError('somthing wrong with sites')
+        
         sitematchtablel = match_hrrr2sites(self.ds, sites)
         ds = select_site_locations(self.ds, sitematchtablel)
         if timeit:
@@ -385,7 +435,10 @@ class HrrrWrfNat(object):
             print(f'generate altitude time: {dt:.2f}')
         
         #### add site names
-        ds.site.attrs['names'] = [f'{st.abb}: {st.name} ({st.state})' for st in sites.stations._stations_list if st.abb in ds.site.data]
+        if sitetype == 'network':
+            ds.site.attrs['names'] = [f'{st.abb}: {st.name} ({st.state})' for st in sites if st.abb in ds.site.data]
+        elif sitetype == 'manual':
+            ds.site.attrs['names'] = [f'{st.abb}: {st.name}' for st in sites if st.abb in ds.site.data]
         
         # ds = ds.expand_dims({"forecast_hour": [self.row.forcast_interval], "datetime": [row.cycle_datetime]})
         return Projection(ds)
@@ -403,13 +456,16 @@ class Projection(object):
         encoding['argmin_y']['_FillValue'] = -9999
         encoding['site']['dtype'] = 'object'
         # encoding.pop('datetime')
-        if not isinstance(cycle_datetime, type(None)):
+        if  isinstance(cycle_datetime, type(None)):
             # ds = ds.expand_dims({"forecast_hour": [self.row.forcast_interval], "datetime": [row.cycle_datetime]})
-            ds = ds.expand_dims({"datetime": [cycle_datetime]})
-        if not isinstance(forcast_hour, type(None)):
-            ds = ds.expand_dims({"forecast_hour": [forcast_hour]})            
+            cycle_datetime = pd.to_datetime(ds.attrs['cycle_datetime'])
+        if  isinstance(forcast_hour, type(None)):
+            forcast_hour = int(ds.attrs['forecast_time'])
+        
+        ds = ds.expand_dims({"datetime": [cycle_datetime]})
+        ds = ds.expand_dims({"forecast_hour": [forcast_hour]})            
             # encoding['forecast_hour']['dtype'] = 'int8'
-            encoding['forecast_hour'] = {"dtype": "int8", "zlib": True,  "complevel": 9,}
+        encoding['forecast_hour'] = {"dtype": "int8", "zlib": True,  "complevel": 9,}
     
         # fout = '/mnt/telg/tmp/blablub.nc'
         fout = fname #self.row.path2file
@@ -503,6 +559,12 @@ def open_grib_file(fname):
         fname = fname.as_posix()
     grbs = pygrib.open(fname)
     ds = read_selected_fields(grbs)#, vp = vp, raise_error_when_varible_missing = raise_error_when_varible_missing) 
+    
+    #### cycle and forcast hour
+    grb = grbs[1]
+    ds.attrs['forecast_time'] = f'{grb.forecastTime:02d}'
+    ds.attrs['cycle_datetime'] = f'{grb.year}-{grb.month:02d}-{grb.day:02d} {grb.hour:02d}:{grb.minute:02d}:{grb.second:02d}'
+    
     grbs.close()
     return HrrrWrfNat(ds)
     
@@ -543,10 +605,7 @@ def match_hrrr2sites(hrrr_ds, sites, discard_outsid_grid = 2.2, interp_vertical 
     discard_outsid_grid: int
         maximum distance to closest gridpoint before considered outside grid and discarded. HRRR has a 3km grid -> minimum possible distance: np.sqrt(18)/2 = 2.12"""
     # get hrrr data at sites
-    if type(sites).__name__ == 'Network':
-        sites = sites.stations._stations_list
-    elif type(sites).__name__ == 'Station':
-        sites = [sites]
+
         
     res_list = []
     relevant_sites = []
@@ -668,6 +727,7 @@ def read_selected_fields(grbs, vp = True, raise_error_when_varible_missing = Tru
 
     ds = xr.Dataset()
 
+    #### 3d parameters
     ### get all parameters with the hybrid typeOfLevel
     if vp:
         param_sel = []
