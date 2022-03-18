@@ -14,6 +14,23 @@ import pandas as pd
 import multiprocessing as mp
 import time
 
+import sys
+
+try:
+    import importlib.resources as pkg_resources
+except ImportError:
+    # Try backported to PY<37 `importlib_resources`.
+    import importlib_resources as pkg_resources
+
+from hrrr_scraper import extra
+
+# tmp = pkg_resources.path('hrrr_scraper.extra', 'hrrr_2d_grb_info_matched.xlsx')
+# tmp = pd.read_excel(tmp)
+# tmp = next(tmp)
+# print(f'tmp: {tmp}')
+# p2script = pl.Path(__file__).resolve()
+# p2base = p2script.parent.parent.as_posix()
+
 # parameters: https://www.nco.ncep.noaa.gov/pmb/products/hrrr/hrrr.t00z.wrfnatf00.grib2.shtml
 params = [### verticle profiles
             {'parameterName' : 'Mass density', 'typeOfLevel' : 'hybrid', 'my_name': 'aerosol_mass_density_vp'},
@@ -447,34 +464,83 @@ class Projection(object):
     def __init__(self, data):
         self.ds  = data
         
-    def save(self, fname, cycle_datetime = None, forcast_hour = None):
+    def save(self, fname, nameformat = None, cycle_datetime = None, forcast_hour = None, applyencoding = None, verbose = True):
+        """
+        Save to netcdf
+
+        Parameters
+        ----------
+        fname : TYPE
+            DESCRIPTION.
+        cycle_datetime : TYPE, optional
+            DESCRIPTION. The default is None.
+        forcast_hour : TYPE, optional
+            DESCRIPTION. The default is None.
+        applyencoding : TYPE, optional
+            There is a problem saving with newer verions of libnetcdf. If your 
+            version is 4.8.x you might not be able to reopen the saved file 
+            unless applyencoding is disabled.None will test the version and 
+            decise from there.
+            The default is True.
+
+        Returns
+        -------
+        TYPE
+            DESCRIPTION.
+
+        """
         ds = self.ds
-        encoding = {k:{"dtype": "float32", "zlib": True,  "complevel": 9,} for k in ds.variables}
-        encoding['argmin_x']['dtype'] = 'int16'
-        encoding['argmin_x']['_FillValue'] = -9999
-        encoding['argmin_y']['dtype'] = 'int16'
-        encoding['argmin_y']['_FillValue'] = -9999
-        encoding['site']['dtype'] = 'object'
-        # encoding.pop('datetime')
+        fname = pl.Path(fname)
         if  isinstance(cycle_datetime, type(None)):
             # ds = ds.expand_dims({"forecast_hour": [self.row.forcast_interval], "datetime": [row.cycle_datetime]})
             cycle_datetime = pd.to_datetime(ds.attrs['cycle_datetime'])
         if  isinstance(forcast_hour, type(None)):
             forcast_hour = int(ds.attrs['forecast_time'])
         
+        if fname.is_dir():
+            assert(isinstance(nameformat, str)), f'If fname is a directory the nameformat kwarg needs to be set. It is {nameformat} and of type {type(nameformat)}'
+        
+        
         ds = ds.expand_dims({"datetime": [cycle_datetime]})
-        ds = ds.expand_dims({"forecast_hour": [forcast_hour]})            
-            # encoding['forecast_hour']['dtype'] = 'int8'
+        ds = ds.expand_dims({"forecast_hour": [forcast_hour]})  
+        
+        
+        encoding = {k:{"dtype": "float32", "zlib": True,  "complevel": 9,} for k in ds.variables}
+        encoding['argmin_x']['dtype'] = 'int16'
+        encoding['argmin_x']['_FillValue'] = -9999
+        encoding['argmin_y']['dtype'] = 'int16'
+        encoding['argmin_y']['_FillValue'] = -9999
+        encoding['site']['dtype'] = 'object'
         encoding['forecast_hour'] = {"dtype": "int8", "zlib": True,  "complevel": 9,}
     
-        # fout = '/mnt/telg/tmp/blablub.nc'
         fout = fname #self.row.path2file
+        
+        #### workaround for problem with saving with newer libnetcdf version
+        
+        libversion = [int(i) for i in xr.backends.netCDF4_.netCDF4.getlibversion()[:3].split('.')]
+        assert(libversion[0] == 4)
+        
+        if (libversion[1] <= 7) or (applyencoding == True):
+            encoding =  encoding
+            if verbose:
+                print('Encoding applied in to_netcdf')
+        elif (libversion[1] > 7) or (applyencoding == False):
+            encoding = None
+            if verbose:
+                print('No encoding applied in to_netcdf')
+        else:
+            assert(False),'not possible'
+        
+        
+        if fname.is_dir():
+            fout = fout.joinpath(nameformat.format(cycle_datetime = cycle_datetime, forcast_hour = forcast_hour))
+        
+        if verbose:
+            print(f'saving to {fout}')
+            return 0
+            
         ds.to_netcdf(fout, encoding=encoding, )
-        # grb_info_df.to_csv(row.path2file.with_suffix('.csv'))
-        # if timeit:
-        #     tsavee = time.time()
-        #     dt = tsavee - tguaglae
-        #     print(f'save time: {dt:.2f}')
+
         return 1#ds_out
     
 class Concatonator(object):
@@ -554,12 +620,12 @@ class Concatonator(object):
             daydict['dataset'].to_netcdf(daydict['fname'])
         
 
-def open_grib_file(fname):
+def open_grib_file(fname, external_params = False):
     if isinstance(fname, pl.Path):
         fname = fname.as_posix()
     grbs = pygrib.open(fname)
-    ds = read_selected_fields(grbs)#, vp = vp, raise_error_when_varible_missing = raise_error_when_varible_missing) 
-    
+    ds = read_selected_fields(grbs, external_params = external_params)#, vp = vp, raise_error_when_varible_missing = raise_error_when_varible_missing) 
+    # return ds
     #### cycle and forcast hour
     grb = grbs[1]
     ds.attrs['forecast_time'] = f'{grb.forecastTime:02d}'
@@ -703,7 +769,7 @@ def match_hrrr2sites(hrrr_ds, sites, discard_outsid_grid = 2.2, interp_vertical 
 #     ds_out = xr.Dataset(df_out)
 #     return {'ds_out': ds_out, 'grb_info_df':grb_info_df}
 
-def read_selected_fields(grbs, vp = True, raise_error_when_varible_missing = True):
+def read_selected_fields(grbs, vp = True, external_params = False,  raise_error_when_varible_missing = True):
     def grb_to_grid(grb_obj):
         """Takes a single grb object containing multiple
         levels. Assumes same time, pressure levels. Compiles to a cube"""
@@ -727,86 +793,150 @@ def read_selected_fields(grbs, vp = True, raise_error_when_varible_missing = Tru
 
     ds = xr.Dataset()
 
+#### BAUSTELLE 1
+    if external_params:
+    #### 3d parameters
+        #read variable match table
+        if external_params == 'HRRRv4_2d':
+            # p2varmatch = './extra/hrrr_2d_grb_info_matched.xlsx'
+            # df = pd.read_excel(p2varmatch)
+            df = pd.read_excel(pkg_resources.open_binary('hrrr_scraper.extra', 'hrrr_2d_grb_info_matched.xlsx'))
+        else:
+            assert(False), f'Currently external_params can only be "HRRRv4_2d". {external_params} not recognized.'
+        ## pick only those with netcdf names
+        df = df[~(df['netcdf variable name'].isna())]
+        # params = []
+        for idx, row in df.iterrows():
+            if row.typeOfLevel =='hybrid':
+                assert(False), 'not working yet, program dude!'  
+                
+        #### get the 2d stuff
+        param_sel = []
+        for idx, row in df.iterrows():
+            if row.typeOfLevel =='hybrid':
+                continue
+            var_name = row.pop('netcdf variable name')
+            long_name = row.pop('long name')
+            units_comments = row.pop('units in extracted/other comments')
+            grib2_variable_name = row.pop('grib2 variable name')
+            msg = row.pop('messagenumber')
+        
+            # if raise_error_when_varible_missing:
+                
+            try:
+                grbsel = grbs.select(**row.to_dict())
+            except ValueError as err:
+                if err.args[0] == "no matches found":
+                    print('2d problem:', end = ' ')
+                    print(row)
+                raise
+            # return grbs, row
+                
+                
+            # else:
+            #     try:
+            #         grbsel = grbs.select(**part)
+            #     except ValueError:
+            #         print('2d problem:', end = ' ')
+            #         print(part)
+            #         continue
+    
+            assert(len(grbsel) == 1), f'The grib select function retured {len(grbsel)} messages instead of 1.'
+            grb = grbsel[0]
+            assert(grb.messagenumber == msg), f'Message number is {grb.messagenumber}. Config file suggests {msg}.'
+            
+            da = xr.DataArray(grb.values.astype(np.float32),coords = {'latitude':(['x','y'], lat),
+                                               'longitude':(['x','y'], lon)}, 
+                         dims = ['x','y'])
+            da.attrs = {k: grb[k] for k in grb.keys() if k in attrs}
+            da.attrs['long_name'] = long_name
+            da.attrs['comments'] = units_comments
+            da.attrs['grib2 variable name'] = grib2_variable_name
+            ds[var_name] = da
+        
     #### 3d parameters
     ### get all parameters with the hybrid typeOfLevel
-    if vp:
+    else:
+        if vp:
+            param_sel = []
+            for par in params:
+                if 'typeOfLevel' in par.keys():
+                    if par['typeOfLevel'] == 'hybrid':
+                        param_sel.append(par)
+        
+            for par in param_sel:
+                # print(par)
+                part = par.copy()
+                part.pop('my_name')
+                try:
+                    grbsel = grbs.select(**part)
+                except ValueError as err:
+                    # if err.args[0] == "no matches found":
+                        # print(err, end = ' ')
+                    print('problem', end = ': ')
+                    print(part)
+                    continue
+                        
+                    # raise
+                # grbsel
+        
+                out = grb_to_grid(grbsel)
+        
+                levels = out['levels']
+        
+                da = xr.DataArray(out['data'],coords = {'latitude':(['x','y'], lat),
+                                                   'longitude':(['x','y'], lon),
+                                                   'level' :levels}, 
+                             dims = ['level','x','y'])
+                grb = grbsel[0]
+                da.attrs = {k: grb[k] for k in grb.keys() if k in attrs}
+                ds[par['my_name']] = da
+        
+        # print('3d done')
+        ### get the 2d stuff
+    
         param_sel = []
         for par in params:
             if 'typeOfLevel' in par.keys():
                 if par['typeOfLevel'] == 'hybrid':
-                    param_sel.append(par)
+                    continue
+            param_sel.append(par)
     
         for par in param_sel:
-            # print(par)
+        #     break
             part = par.copy()
             part.pop('my_name')
-            try:
-                grbsel = grbs.select(**part)
-            except ValueError as err:
-                # if err.args[0] == "no matches found":
-                    # print(err, end = ' ')
-                print('problem', end = ': ')
-                print(part)
-                continue
-                    
-                # raise
-            # grbsel
+            
+            if raise_error_when_varible_missing:
+                
+                # grbsel = grbs.select(**part)
+                
+                try:
+                    grbsel = grbs.select(**part)
+                except ValueError as err:
+                    if err.args[0] == "no matches found":
+                        print('2d problem:', end = ' ')
+                        print(part)
+                    raise
+                
+                
+            else:
+                try:
+                    grbsel = grbs.select(**part)
+                except ValueError:
+                    print('2d problem:', end = ' ')
+                    print(part)
+                    continue
     
-            out = grb_to_grid(grbsel)
-    
-            levels = out['levels']
-    
-            da = xr.DataArray(out['data'],coords = {'latitude':(['x','y'], lat),
-                                               'longitude':(['x','y'], lon),
-                                               'level' :levels}, 
-                         dims = ['level','x','y'])
+            assert(len(grbsel) == 1)
             grb = grbsel[0]
+            da = xr.DataArray(grb.values.astype(np.float32),coords = {'latitude':(['x','y'], lat),
+                                               'longitude':(['x','y'], lon)}, 
+                         dims = ['x','y'])
             da.attrs = {k: grb[k] for k in grb.keys() if k in attrs}
             ds[par['my_name']] = da
     
-    # print('3d done')
-    ### get the 2d stuff
-
-    param_sel = []
-    for par in params:
-        if 'typeOfLevel' in par.keys():
-            if par['typeOfLevel'] == 'hybrid':
-                continue
-        param_sel.append(par)
-
-    for par in param_sel:
-    #     break
-        part = par.copy()
-        part.pop('my_name')
-        
-        if raise_error_when_varible_missing:
-            
-            # grbsel = grbs.select(**part)
-            
-            try:
-                grbsel = grbs.select(**part)
-            except ValueError as err:
-                if err.args[0] == "no matches found":
-                    print('2d problem:', end = ' ')
-                    print(part)
-                raise
-            
-            
-        else:
-            try:
-                grbsel = grbs.select(**part)
-            except ValueError:
-                print('2d problem:', end = ' ')
-                print(part)
-                continue
-
-        assert(len(grbsel) == 1)
-        grb = grbsel[0]
-        da = xr.DataArray(grb.values.astype(np.float32),coords = {'latitude':(['x','y'], lat),
-                                           'longitude':(['x','y'], lon)}, 
-                     dims = ['x','y'])
-        da.attrs = {k: grb[k] for k in grb.keys() if k in attrs}
-        ds[par['my_name']] = da
+    
     return ds
 
 def select_site_locations(ds, sitematchtablel):

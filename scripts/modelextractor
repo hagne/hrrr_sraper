@@ -4,18 +4,55 @@
 Created on Mon Feb 28 15:13:24 2022
 
 @author: hagen
+
+dependences:
+    pygrib
+    xarray
+    scipy
+    netcdf4
+    pyxlsb
 """
 import argparse
 import pathlib as pl
-import hrrr_scraper.hrrr_lab as hrrr_lab
+import pandas as pd
+
+
+try:
+    import hrrr_scraper.hrrr_lab as hrrr_lab
+except ModuleNotFoundError:
+    # add the base path of hrrr_sraper to the path variable 
+    import sys
+    p2script = pl.Path(__file__).resolve()
+    p2base = p2script.parent.parent.as_posix()
+    sys.path.append(p2base)
+    import hrrr_scraper.hrrr_lab as hrrr_lab
+    # import .
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-i','--input', help='Path to grib file that is to be parsed.')
+parser.add_argument('-i','--input', help='Path to grib file or folder containing the grib files. If its a folder all files will be parsd.')
 parser.add_argument('-o','--output', help='Path to file results are written to (netcdf).')
-parser.add_argument('-c','--config', help='Path to config file. If set -i and -o will be ignored.')
+parser.add_argument('-c','--config', help='(under construction) Path to config file. If set -i and -o will be ignored.',  action='store_true')
+parser.add_argument('-f', '--first', help='testing: will merely process the first file.',  action='store_true')
+# parser.add_argument('-d', '--list_files', help='testing: lists all files that will/would be processed.',  action='store_true')
+parser.add_argument('-d', '--dry', help='testing: will stop before execution.',  action='store_true')
+parser.add_argument('-v', '--verbose', help='More info during execution',  action='store_true')
+parser.add_argument('-p', '--param', help='testing: Use the internal parameter dictionary instead of the xls sheet.',  action='store_true')
+# parser.add_argument('-w', '--workplan', help='Will return the workplan without processing enything',  action='store_true')
 
 args = parser.parse_args()
+
+
+if args.verbose:
+    verbose = True
+else:
+    verbose = False
+
+if args.param:
+    external_params = False
+else:
+    external_params = True
+   
 #### ****Config****
 if args.config:
     print('Under construction. ByBy.')
@@ -27,18 +64,53 @@ if args.config:
 else:
     #### file precheck
     p2f = pl.Path(args.input)
+    if p2f.is_dir():
+        p2f = p2f.resolve()
+        if verbose:
+            print(f'Processing all files in folder: "{p2f}"')
+        p2f = p2f.glob('*.grib*')
+    else:
+        assert(p2f.is_file()), 'input file does not exist'
+        if verbose:
+            print('Processing single file: {p2f}')
+        p2f = [p2f,]
+    
     p2fo = pl.Path(args.output)
-    assert(p2f.is_file()), 'input file does not exist'
     assert(p2fo.resolve().parent.is_dir()), 'Folder of output file path does not exist.'
-    #### get sites to project on
+    
+    #### TODO: sites from config file ... get sites to project on
     sitelist = [{'name': 'test', 'abb': 'tst', 'lat': 40.12498, 'lon': -105.2368}, {'name': 'test2', 'abb': 'tsz', 'lat': 41.12498, 'lon': -115.2368}]
     
-    #### read grib file
-    # print(p2f)
-    hrrinst = hrrr_lab.open_grib_file(p2f)
+    #### TODO: make workplan ... maybe not, since we don't know the output filenames yet.
+    # workplan = pd.DataFrame(p2f, columns = ['path2grib',])
     
-    #### projection onto site
-    hrrr_proj = hrrinst.project2sites(sitelist)
-    
-    #### save result
-    hrrr_proj.save(p2fo)
+    for e,fn in enumerate(p2f):
+        if verbose:
+            print(f'processing file: {fn}')
+        if args.dry:
+            continue
+        if args.first:
+            if e >= 1:
+                print('Only first -> exit')
+        #### read grib file
+        # print(p2f)
+        #### TODO: external params file need to be picked automatically ... grib file has no key that clearly states what the file is.
+        #### TODO: get the params that should go in the file from config file
+        modeloutput = 'HRRRv4_2d'
+        if modeloutput == 'HRRRv4_2d':
+            vp = False
+        else:
+            assert(False), 'programming required'
+        
+        if args.param:
+            modeloutput = False
+        hrrinst = hrrr_lab.open_grib_file(fn.as_posix(), external_params=modeloutput)
+        
+        #### projection onto site
+        hrrr_proj = hrrinst.project2sites(sitelist, vp = vp)
+        
+        #### save result
+        # print(hrrr_proj.ds)
+        #### TODO: nameformat is hardcoded ... config file
+        nameformat='test_{cycle_datetime.year:04d}{cycle_datetime.month:02d}{cycle_datetime.day:02d}_{cycle_datetime.hour:02d}_{forcast_hour:02d}.nc'
+        hrrr_proj.save(p2fo, nameformat = nameformat, verbose=verbose)
