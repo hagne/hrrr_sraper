@@ -266,6 +266,10 @@ class ProjectorProject(object):
             self._ftp = None
         return self._workplan
     
+    @workplan.setter
+    def workplan(self, value):
+        self._workplan = value
+    
     
     def remove_artefacts(self):
         """
@@ -356,7 +360,7 @@ class WorkplanEntry(object):
         return self._projection
     
     def save_projection(self):
-        self.projection.save(self.row.path2file, self.row.cycle_datetime, self.row.forcast_interval)
+        self.projection.save(self.row.path2file, cycle_datetime = self.row.cycle_datetime, forcast_hour = self.row.forcast_interval)
     
     def process(self, remove_grib_file = True):
         print('dl', end = '')
@@ -537,7 +541,6 @@ class Projection(object):
         
         if verbose:
             print(f'saving to {fout}')
-            return 0
             
         ds.to_netcdf(fout, encoding=encoding, )
 
@@ -620,19 +623,29 @@ class Concatonator(object):
             daydict['dataset'].to_netcdf(daydict['fname'])
         
 
-def open_grib_file(fname, external_params = False):
+def open_grib_file(fname, external_params = False, grab_basics = False):
     if isinstance(fname, pl.Path):
         fname = fname.as_posix()
-    grbs = pygrib.open(fname)
-    ds = read_selected_fields(grbs, external_params = external_params)#, vp = vp, raise_error_when_varible_missing = raise_error_when_varible_missing) 
-    # return ds
-    #### cycle and forcast hour
-    grb = grbs[1]
-    ds.attrs['forecast_time'] = f'{grb.forecastTime:02d}'
-    ds.attrs['cycle_datetime'] = f'{grb.year}-{grb.month:02d}-{grb.day:02d} {grb.hour:02d}:{grb.minute:02d}:{grb.second:02d}'
-    
-    grbs.close()
-    return HrrrWrfNat(ds)
+        
+    with pygrib.open(fname) as grbs:
+        if grab_basics:
+            basics = {}
+            grb = grbs[1]
+            basics['forecastTime'] = grb.forecastTime
+            basics['cycledatetime'] = pd.to_datetime(f'{grb.year}-{grb.month:02d}-{grb.day:02d} {grb.hour:02d}:{grb.minute:02d}:{grb.second:02d}')
+            out = basics
+        else:
+            # grbs = pygrib.open(fname)
+            ds = read_selected_fields(grbs, external_params = external_params)#, vp = vp, raise_error_when_varible_missing = raise_error_when_varible_missing) 
+            # return ds
+            #### cycle and forcast hour
+            grb = grbs[1]
+            ds.attrs['forecast_time'] = f'{grb.forecastTime:02d}'
+            ds.attrs['cycle_datetime'] = f'{grb.year}-{grb.month:02d}-{grb.day:02d} {grb.hour:02d}:{grb.minute:02d}:{grb.second:02d}'
+        
+            # grbs.close()
+            out = HrrrWrfNat(ds)
+    return out
     
     
 
