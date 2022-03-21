@@ -15,6 +15,7 @@ dependences:
 import argparse
 import pathlib as pl
 import pandas as pd
+import ast
 
 import importlib.resources as pkg_resources
 import configparser
@@ -40,34 +41,63 @@ except ModuleNotFoundError:
 #     external_params = False
 # else:
 #     external_params = True
- 
-def main(path2grib = False, path2outfld = False, config = False, verbose = False, dry = False, first = False, param = False):    
-    
+
+#### TODO decide on the default values! Alos in argparser below. e.g. overwrite? verbose? error_when....
+def main(path2grib = None, path2outfld = None, config = None, verbose = True, dry = False, first = False, param = False, overwrite = False, error_when_workplan_empty = True):    
+    # print(config)
     #### Config
-    if config:
-        assert(path2grib == False)
-        assert(path2outfld == False)
-        print('Under construction. ByBy.')
-        #### TODO right now it uses internal file file precheck
+    if isinstance(config, list):
+        if verbose:
+            print('from config')
+        assert(isinstance(path2grib, type(None)))
+        assert(isinstance(path2outfld, type(None)))
+        
         config_in = configparser.ConfigParser(allow_no_value=True,)
-        if 0:
-            p2conf = pl.Path(config)
+        if len(config)>0:
+            p2conf = pl.Path(config[0])
             assert(p2conf.is_file()), 'Config file does not exist'
+            with open(p2conf, 'r') as rein:
+                config_in.read_string(rein.read())
+            if verbose:
+                print('read config.')
         else:
             with pkg_resources.open_text('hrrr_scraper.extra', 'example.ini') as rein:
                 config_in.read_string(rein.read())
+            if verbose:
+                print("No config file specified. Use example.ini from package's extra folder.")
                 
         p2f = config_in['file_io']['path2input'].split('#')[0].strip() 
         path2outfld = config_in['file_io']['path2output'].split('#')[0].strip() 
-        modeloutput = config_in['file_io']['input_file_type'].split('#')[0].strip()   
+        file_type = config_in['file_io']['input_file_type'].split('#')[0].strip()   
         nameformat = config_in['file_io']['outputnameformat']
-        # nameformat='test_{ct.year:04d}{ct.month:02d}{ct.day:02d}_{ct.hour:02d}_{ft:02d}.nc'
-
+        
+        #### TODO: add site collections
+        sitelist = []
+        for sk in config_in['locations'].keys():
+            site = ast.literal_eval(f"{{{config_in['locations']['TBL']}}}")
+            site['abb'] = sk
+            sitelist.append(site)
+            
+        if verbose:
+            print('sites to be considered:')
+            for site in sitelist:
+                print('\t', end = '')
+                print(site)
+        
+            
+        #### variables to extract
+        variables2extract = [v.split('#')[0].strip() for v in config_in['variables'].keys()]
+        if verbose:
+            print('variables to be extracted: ', end = '')
+            print(variables2extract)
     #### not config
     else:
         p2f = path2grib
-        modeloutput = 'HRRRv4_2d'
+        file_type = 'HRRRv4_2d'
         nameformat='test_{ct.year:04d}{ct.month:02d}{ct.day:02d}_{ct.hour:02d}_{ft:02d}.nc'
+                
+        sitelist = [{'name': 'test', 'abb': 'tst', 'lat': 40.12498, 'lon': -105.2368}, {'name': 'test2', 'abb': 'tsz', 'lat': 41.12498, 'lon': -115.2368}]
+        variables2extract = 'all'
 
     
     #### file precheck
@@ -87,7 +117,8 @@ def main(path2grib = False, path2outfld = False, config = False, verbose = False
     assert(p2fo.resolve().parent.is_dir()), 'Folder of output file path does not exist.'
     
     # return p2f, p2fo
-    #### TODO: make workplan ... maybe not, since we don't know the output filenames yet.
+    
+    
     #### create workplan
     workplan = pd.DataFrame(p2f, columns = ['path2grib',])  
     
@@ -103,19 +134,20 @@ def main(path2grib = False, path2outfld = False, config = False, verbose = False
     workplan['path2fout'] = workplan.apply(lambda row: p2fo.joinpath((nameformat.format(ct =row.ct, ft = row.ft))), axis = 1)
     
     # remove from workplan when output path is file
-    workplan = workplan[~workplan.apply(lambda row: row.path2fout.is_file(), axis = 1)]
+    if not overwrite:
+        workplan = workplan[~workplan.apply(lambda row: row.path2fout.is_file(), axis = 1)]
     
     if first:
         workplan = workplan.iloc[[0]]
+    
+    if verbose:
+        print('The workplan:')
+        print(workplan)
+        
+    if error_when_workplan_empty:
+        assert(workplan.shape[0] != 0), 'No files to process'
     # return workplan
 
-    
-    
-    #### TODO: sites from config file ... get sites to project on
-    sitelist = [{'name': 'test', 'abb': 'tst', 'lat': 40.12498, 'lon': -105.2368}, {'name': 'test2', 'abb': 'tsz', 'lat': 41.12498, 'lon': -115.2368}]
-    
-
-    
     for idx,row in workplan.iterrows():
         if verbose:
             print(f'processing file: {row.path2grib}')
@@ -124,26 +156,21 @@ def main(path2grib = False, path2outfld = False, config = False, verbose = False
         
         #### read grib file
         # print(p2f)
-        #### TODO: external params file need to be picked automatically ... grib file has no key that clearly states what the file is.
-        #### TODO: get the params that should go in the file from config file
-        
-        if modeloutput == 'HRRRv4_2d':
+        #### TODO: external params file should be picked automatically ... grib file has no key that clearly states what the file is.
+        if file_type == 'HRRRv4_2d':
             vp = False
+            external_params = {'file_type': file_type, 'variables': variables2extract}
         else:
             assert(False), 'programming required'
         
         if param:
-            modeloutput = False
-            
-        hrrinst = hrrr_lab.open_grib_file(row.path2grib.as_posix(), external_params=modeloutput)
+            external_params = False
+        hrrinst = hrrr_lab.open_grib_file(row.path2grib.as_posix(), external_params=external_params)
         
         #### projection onto site
         hrrr_proj = hrrinst.project2sites(sitelist, vp = vp)
         
         #### save result
-        # print(hrrr_proj.ds)
-        #### TODO: nameformat is hardcoded ... config file
-        # nameformat='test_{cycle_datetime.year:04d}{cycle_datetime.month:02d}{cycle_datetime.day:02d}_{cycle_datetime.hour:02d}_{forcast_hour:02d}.nc'
         hrrr_proj.save(row.path2fout,
                        # nameformat = nameformat, 
                        verbose=verbose)
@@ -152,9 +179,9 @@ def main(path2grib = False, path2outfld = False, config = False, verbose = False
 #### if _name_....            
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i','--input', help='Path to grib file or folder containing the grib files. If its a folder all files will be parsd.')
+    parser.add_argument('-i','--input', help='Path to grib file or folder containing the grib files. If its a folder all files will be parsed.')
     parser.add_argument('-o','--output', help='Path to file results are written to (netcdf).')
-    parser.add_argument('-c','--config', help='(under construction) Path to config file. If set -i and -o will be ignored.',  action='store_true')
+    parser.add_argument('-c','--config', help='Path to config file. If set -i and -o will be ignored.',  nargs='*')
     parser.add_argument('-f', '--first', help='testing: will merely process the first file.',  action='store_true')
     # parser.add_argument('-d', '--list_files', help='testing: lists all files that will/would be processed.',  action='store_true')
     parser.add_argument('-d', '--dry', help='testing: will stop before execution.',  action='store_true')

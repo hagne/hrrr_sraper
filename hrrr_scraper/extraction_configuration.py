@@ -8,6 +8,16 @@ Created on Tue Mar  1 10:22:02 2022
 
 import configparser
 import ast
+import importlib.resources as pkg_resources
+import pandas as pd
+
+def get_all_variable_names(file_type = 'HRRRv4_2d'):
+    if file_type == 'HRRRv4_2d':
+        df = pd.read_excel(pkg_resources.open_binary('hrrr_scraper.extra', 'hrrr_2d_grb_info_matched.xlsx'))
+        
+    df = df[~df['netcdf variable name'].isna()]
+    txt = '\n'.join([f"{row['netcdf variable name']: <12} # {row['long name']}" for idx, row in df.iterrows()])
+    return txt
 
 def create_config(version = None):
     """

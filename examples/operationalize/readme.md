@@ -5,14 +5,10 @@ development.ipynb : develop the proceedure that goes into the script
 Todo
 ===========
 * dave creates a test scenario
-* create test kwargs in script      
-    * 1: returns workplan
-    * x: somthing about the extracted variables ... like available ... used here
-    * x: test run first row from workplan
-* read the variable matcher xcel sheets
-* My code can so far only handle 3d ... adapt to 2d ... done here: http://localhost:8000/lab/tree/prog/hrrr_sraper/examples/HRRRv4.ipynb
-    * try if it works?!?
-    * try to use the variable mach xcel sheet
+* add 3d file capability
+    * does the excel file have any netcdf variables?
+    * add the HRRRv4_3d option and make it run
+    
 * adapted code to run Rap
 * some of the projected variables are still float64
 * there are retrieved parameters that need to be taken care of
