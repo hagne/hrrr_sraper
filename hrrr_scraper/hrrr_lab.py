@@ -521,21 +521,23 @@ class Projection(object):
         fout = fname #self.row.path2file
         
         #### workaround for problem with saving with newer libnetcdf version
-        
-        libversion = [int(i) for i in xr.backends.netCDF4_.netCDF4.getlibversion()[:3].split('.')]
-        assert(libversion[0] == 4)
-        
-        if (libversion[1] <= 7) or (applyencoding == True):
-            encoding =  encoding
-            if verbose:
-                print('Encoding applied in to_netcdf')
-        elif (libversion[1] > 7) or (applyencoding == False):
+        try:
+            libversion = [int(i) for i in xr.backends.netCDF4_.netCDF4.getlibversion()[:3].split('.')]
+            assert(libversion[0] == 4)
+            
+            if (libversion[1] <= 7) or (applyencoding == True):
+                encoding =  encoding
+                if verbose:
+                    print('Encoding applied in to_netcdf')
+            elif (libversion[1] > 7) or (applyencoding == False):
+                encoding = None
+                if verbose:
+                    print('No encoding applied in to_netcdf')
+            else:
+                assert(False),'not possible'
+        except:
             encoding = None
-            if verbose:
-                print('No encoding applied in to_netcdf')
-        else:
-            assert(False),'not possible'
-        
+            print('At some point in time xarray changed and did not allow this anymore .... no')
         
         if fname.is_dir():
             fout = fout.joinpath(nameformat.format(cycle_datetime = cycle_datetime, forcast_hour = forcast_hour))
