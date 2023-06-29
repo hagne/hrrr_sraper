@@ -180,7 +180,7 @@ def main(dryrun = False, first = False):
     #### -------
     messages = ['run started {}\n========='.format(pd.Timestamp(datetime.datetime.now()))]
     messages.append(f'scrape_hrrr_conus_nat version {version}')
-    p2f_shortlog = '/mnt/telg/tmp/log.txt'
+    p2f_shortlog = '/export/htelg/tmp/log.txt'
     errors = []
     abort = False
     exit_status = 'fail'
@@ -246,8 +246,8 @@ def main(dryrun = False, first = False):
                                                
             #### process 
             pp =  hrrr_lab.ProjectorProject(gml_sites, 
-                                             path2raw = '/mnt/telg/tmp/hrrr_tmp/',
-                                             path2projected_individual = '/mnt/telg/tmp/hrrr_tmp_inter/',
+                                             path2raw = '/export/htelg/tmp/hrrr_tmp/',
+                                             path2projected_individual = '/export/htelg/tmp/hrrr_tmp_inter/',
                                              # path2projected_final = '/mnt/telg/projects/smoke_at_gml_sites/data/wrfnat/',
                                              path2projected_final = '/nfs/stu3data2/Model_data/HRRR/HRRRv4_conus_projected/',
                                              ftp_server = 'ftp.ncep.noaa.gov',
@@ -360,9 +360,18 @@ def main(dryrun = False, first = False):
     except:
         print('sending email failed')
     
+    #### new logging 
+    #### TODO: evantuall this should replace the above
+    retrieval = type('scrape_hrrr', (), {})
+    retrieval.no_processed_success = no_of_files_generated
+    retrieval.no_processed_error = len(errors)
+    retrieval.no_processed_warning = 0
+    
     print('++++++++++++++++')
     
     print('End of scirpt!')
+    
+    return retrieval
     
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = 'Say hello')
@@ -370,4 +379,10 @@ if __name__ == '__main__':
     parser.add_argument('-f', '--first', help='testing: process only the very first enty.',  action='store_true')
     args = parser.parse_args()
 
-    main(dryrun = args.dry, first = args.first)
+    retrieval = main(dryrun = args.dry, first = args.first)
+    
+    import productomator.lab as prolab
+    
+    auto = prolab.Automation()
+    auto.log()
+    
