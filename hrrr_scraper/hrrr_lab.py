@@ -22,8 +22,7 @@ except ImportError:
     # Try backported to PY<37 `importlib_resources`.
     import importlib_resources as pkg_resources
     
-import warnings
-warnings.filterwarnings("ignore")
+
 
 # from hrrr_scraper import extra
 
@@ -284,7 +283,7 @@ class ProjectorProject(object):
         return 
     
     
-    def process(self, no_of_cpu = 3, test = False):
+    def process(self, no_of_cpu = 3, test = False, verbose = False):
         # def process_workplan_row(row):
         #     wpe = WorkplanEntry(self, row)
         #     wpe.process()
@@ -312,7 +311,7 @@ class ProjectorProject(object):
             # out['pool_return'] = pool.map(partial(process_workplan_row, **{'ftp_settings': ftp_settings, 'sites': sites}), rows)
             
             # pool_return = 
-            pool.map(partial(WorkplanEntry, **{'project': self, 'autorun': True}), rows)
+            pool.map(partial(WorkplanEntry, **{'project': self, 'autorun': True, 'verbose': verbose}), rows)
             # out['pool_return'] = pool_return
             
             pool.close() # no more tasks
@@ -327,7 +326,7 @@ class ProjectorProject(object):
 
 
 class WorkplanEntry(object):
-    def __init__(self, workplanrow, project = None, autorun = False):
+    def __init__(self, workplanrow, project = None, autorun = False, verbose = False):
         self.project = project
         self.row = workplanrow
         self.verbose = True
@@ -335,7 +334,7 @@ class WorkplanEntry(object):
         self._hrrr_inst = None
         self._projection = None
         if autorun:
-            self.process()
+            self.process(verbose = verbose)
         
     
     def download(self):
@@ -366,27 +365,35 @@ class WorkplanEntry(object):
     def save_projection(self):
         self.projection.save(self.row.path2file, cycle_datetime = self.row.cycle_datetime, forcast_hour = self.row.forcast_interval)
     
-    def process(self, remove_grib_file = True):
-        print('dl', end = '')
+    def process(self, remove_grib_file = True, verbose = False):
+        if verbose:
+            print('dl', end = '')
         self.download()
-        print('.', end = '')
-        print('pr', end = '')
+        if verbose:
+            print('.', end = '')
+            print('pr', end = '')
         self.projection
         self._hrrr_inst = None # with this I am hoping to save up some memory a little bit earlier then it would otherwise
-        print('.', end = '')
-        print('s', end = '')
+        if verbose:
+            print('.', end = '')
+            print('s', end = '')
         self.save_projection()
-        print('.', end = '')
+        if verbose:
+            print('.', end = '')
         self._projection = None # To prevent amemory pileup
         # hwn = open_grib_file(self.row.path2tempfile)
         # projection = hwn.project2sites(self.project.sites)
         # projection.save(self.row.path2file, self.row.cycle_datetime, self.row.forcast_interval)
         # ds = ds.expand_dims({"forecast_hour": [self.row.forcast_interval], "datetime": [row.cycle_datetime]})
-        if remove_grib_file:
-            print('ul', end = '')
+        if remove_grib_file:            
+            if verbose:
+                print('ul', end = '')
             self.row.path2tempfile.unlink()
-            print('.', end = '')
-        print('..', end = '')
+            
+            if verbose:
+                print('.', end = '')
+        if verbose:
+            print('..', end = '')
         return 1#hwn 
 
 class HrrrWrfNat(object):
@@ -472,7 +479,7 @@ class Projection(object):
     def __init__(self, data):
         self.ds  = data
         
-    def save(self, fname, nameformat = None, cycle_datetime = None, forcast_hour = None, applyencoding = None, verbose = True):
+    def save(self, fname, nameformat = None, cycle_datetime = None, forcast_hour = None, applyencoding = None, verbose = False):
         """
         Save to netcdf
 
@@ -524,7 +531,7 @@ class Projection(object):
         fout = fname #self.row.path2file
         
         #### workaround for problem with saving with newer libnetcdf version
-        try:
+        if 0:
             libversion = [int(i) for i in xr.backends.netCDF4_.netCDF4.getlibversion()[:3].split('.')]
             assert(libversion[0] == 4)
             
@@ -538,9 +545,9 @@ class Projection(object):
                     print('No encoding applied in to_netcdf')
             else:
                 assert(False),'not possible'
-        except:
+        else:
             encoding = None
-            print('At some point in time xarray changed and did not allow this anymore .... no')
+            # print('At some point in time xarray changed and did not allow this anymore .... no')
         
         if fname.is_dir():
             fout = fout.joinpath(nameformat.format(cycle_datetime = cycle_datetime, forcast_hour = forcast_hour))

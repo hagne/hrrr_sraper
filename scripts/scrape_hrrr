@@ -23,8 +23,14 @@ from email.mime.text import MIMEText
 import os
 import argparse
 
+import productomator.lab as prolab
+
+
+import warnings
+warnings.filterwarnings("ignore")
+
 pid = os.getpid()
-print(f'pid of current process: {pid}')
+#print(f'pid of current process: {pid}')
 version = '2.0.2'
 
 
@@ -53,7 +59,8 @@ def monitor_processes(name = 'scrape_hrrr', duration = 300, verbose = False):
             data[f'cpu{e}'] = p.cpu_percent()
         data
         newrow = pd.DataFrame(data, index = [now])
-        mon_proc = mon_proc.append(newrow)
+        # mon_proc = mon_proc.append(newrow)
+        mon_proc = pd.concat([mon_proc, newrow])
         if verbose:
             if i == 0:
                 print(',\t'.join([f'{col}' for col in newrow.columns]))
@@ -92,7 +99,7 @@ def check_log(path2log = 'my_dict.json',
               maxlength = 50,
               minlength = 4,
               mincpumax = 5,
-              verbose = True):
+              verbose = False):
     if verbose:
         print('checklog\n==================')
         
@@ -119,7 +126,6 @@ def check_log(path2log = 'my_dict.json',
     if len(loglist) >= minlength:
 
         # if last is False, check if the others are false too and then kill processes
-        verbose = True
         logl = loglist[-minlength:]
         if logl[-1]['exit_status'] == 'clean':
             if verbose:
@@ -175,7 +181,7 @@ def check_log(path2log = 'my_dict.json',
         print('++++++++++++++++++++++++')
     return out
 
-def main(dryrun = False, first = False):
+def main(dryrun = False, first = False, verbose = False):
     #### execute the program
     #### -------
     messages = ['run started {}\n========='.format(pd.Timestamp(datetime.datetime.now()))]
@@ -184,26 +190,30 @@ def main(dryrun = False, first = False):
     errors = []
     abort = False
     exit_status = 'fail'
-    loglist = check_log(path2log=p2f_shortlog)['loglist']
+    loglist = check_log(path2log=p2f_shortlog, verbose = verbose)['loglist']
     # verbose = True
     
-    print('Begin processing')
-    print('=================')
+    if verbose:
+        print('Begin processing')
+        print('=================')
     try:   
         running_processes = [p for p in psutil.process_iter() if p.name() == "scrape_hrrr"]
         running_processes = [p for p in running_processes if p.pid != pid]
         no_of_processes_running = len(running_processes)
-        print(f'number of hrrr_scrape processes running: {no_of_processes_running}')
+        if verbose:
+            print(f'number of hrrr_scrape processes running: {no_of_processes_running}')
         mem = psutil.virtual_memory()
         no_of_cpu = round((100 - mem.percent - 15)/20)
-        print(f'numper of cpus: {no_of_cpu}')
+        if verbose:
+            print(f'numper of cpus: {no_of_cpu}')
         messages.append(f'numper of cpus: {no_of_cpu}')
         if no_of_cpu < 1:
             messages.append('aborted since insufficient memory')
             no_of_files_generated = 0
             no_of_files_generated_bdl = 0
             abort = True
-            print('aborted,insufficient memoryg')
+            if verbose:
+                print('aborted,insufficient memoryg')
             exit_status = 'low_memory'
         elif no_of_processes_running > 0:
             
@@ -213,7 +223,7 @@ def main(dryrun = False, first = False):
                 messages.append(txt)
                 print(txt)
                 
-            mon_proc = monitor_processes()
+            mon_proc = monitor_processes(verbose = verbose)
             messages.append(mon_proc.mean().__str__())
             
             
@@ -221,7 +231,8 @@ def main(dryrun = False, first = False):
             no_of_files_generated_bdl = 0
             abort = True
             exit_status = 'process_running'
-            print('aborted, process still running')
+            if verbose:
+                print('aborted, process still running')
         else:
             gml_sites = atmPy.data_archives.noaa_gml.get_all_sites()
             # extra from Betsy
@@ -257,14 +268,15 @@ def main(dryrun = False, first = False):
             if first:
                 pp.workplan = pp.workplan.iloc[[0], :]
             no_of_files_generated = pp.workplan.shape[0]
-            print(f'number of files to process: {no_of_files_generated}')
+            if verbose:
+                print(f'number of files to process: {no_of_files_generated}')
             if dryrun:
                 return pp.workplan
                 
             if no_of_files_generated == 0:
                 exit_status = 'no_files_on_server'
             else:
-                out = pp.process(no_of_cpu=no_of_cpu)
+                out = pp.process(no_of_cpu=no_of_cpu, verbose = verbose)
                 
                 # out_bdl = scrapelab.concat2daily_files()
                 workplan_bdl = out['concat'].workplan
@@ -273,7 +285,8 @@ def main(dryrun = False, first = False):
             #     messages.append(f'{row.path2tempfile} -> {row.path2file}')
                 exit_status = 'clean'
                 
-            print('Done!!')
+            if verbose:
+                print('Done!!')
     except:
         error, error_txt, trace = sys.exc_info()
         tm = ['{}: {}'.format(error.__name__, error_txt.args[0])] + traceback.format_tb(trace)
@@ -284,7 +297,8 @@ def main(dryrun = False, first = False):
         no_of_files_generated = 0
         no_of_files_generated_bdl = 0
     
-    print('++++++++++++++++++++++++++')
+    if verbose:
+        print('++++++++++++++++++++++++++')
         
     messages.append('============\nrun finished {}\n\n'.format(pd.Timestamp(datetime.datetime.now())))
     
@@ -295,8 +309,9 @@ def main(dryrun = False, first = False):
     #### save log
     ##### shortlog
     
-    print('logging')
-    print('=========')
+    if verbose:
+        print('logging')
+        print('=========')
     try:
         log = {}
         log['exit_status'] = exit_status
@@ -312,19 +327,23 @@ def main(dryrun = False, first = False):
         with open(p2f_shortlog, 'w') as f:
             # loglist.to_csv(f)
             json.dump(loglist, f)
-        print('Done')
+        if verbose:
+            print('Done')
     except:
         errors.append('logging failed!?!?')
-        print('writing log failed')
-    print('++++++++++++++')
+        if verbose:
+            print('writing log failed')
+    if verbose:
+        print('++++++++++++++')
     
     if len(errors) !=0:
         error_txt = '\n\n======================\nERRORS\n=======================\n'
         error_txt += '\n=======================================\n=========================================='.join(errors)
         message_txt += error_txt
     #### send email with results
-    print('Sending email')
-    print('==============')
+    if verbose:
+        print('Sending email')
+        print('==============')
     try:
         # import smtplib
     
@@ -356,9 +375,11 @@ def main(dryrun = False, first = False):
         s = smtplib.SMTP('localhost')
         s.send_message(msg)
         s.quit()
-        print('Done')
+        if verbose:
+            print('Done')
     except:
-        print('sending email failed')
+        if verbose:
+            print('sending email failed')
     
     #### new logging 
     #### TODO: evantuall this should replace the above
@@ -367,9 +388,11 @@ def main(dryrun = False, first = False):
     retrieval.no_processed_error = len(errors)
     retrieval.no_processed_warning = 0
     
-    print('++++++++++++++++')
+    if verbose:
+        print('++++++++++++++++')
     
-    print('End of scirpt!')
+    if verbose:
+        print('End of scirpt!')
     
     return retrieval
     
@@ -377,12 +400,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = 'Say hello')
     parser.add_argument('-d', '--dry', help='testing: will stop before execution.',  action='store_true')
     parser.add_argument('-f', '--first', help='testing: process only the very first enty.',  action='store_true')
+    parser.add_argument('-v', '--verbose', help='verbose',  action='store_true')
     args = parser.parse_args()
 
-    retrieval = main(dryrun = args.dry, first = args.first)
-    
-    import productomator.lab as prolab
-    
-    auto = prolab.Automation()
+    retrieval = main(dryrun = args.dry, first = args.first, verbose = args.verbose)
+    auto = prolab.Automation(retrieval, product_name='scrape_hrrr')
     auto.log()
     
