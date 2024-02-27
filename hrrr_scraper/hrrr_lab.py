@@ -120,6 +120,8 @@ class ProjectorProject(object):
                  path2raw = '/mnt/telg/tmp/hrrr_tmp/',
                  path2projected_individual = '/mnt/telg/tmp/hrrr_tmp_inter/',
                  path2projected_final = '/mnt/telg/projects/smoke_at_gml_sites/data/wrfnat/',
+                 # ftp_server = 'ftp.ncep.noaa.gov',
+                 # ftp_path2files = '/pub/data/nccf/com/hrrr/prod',
                  ftp_server = 'ftp.ncep.noaa.gov',
                  ftp_path2files = '/pub/data/nccf/com/hrrr/prod',
                  max_forcast_interval= 18):
@@ -195,6 +197,7 @@ class ProjectorProject(object):
             #get all files from relevant folders
             files_all = []
             daysonftp = self.ftp.nlst()
+            daysonftp = [d for d in daysonftp if 'hrrr' in d]
             if self.verbose:
                 print(f'ftp: available days: {daysonftp}')
             for day in daysonftp:
