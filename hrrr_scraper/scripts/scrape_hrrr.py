@@ -181,12 +181,20 @@ def check_log(path2log = 'my_dict.json',
         print('++++++++++++++++++++++++')
     return out
 
-def main(dryrun = False, first = False, verbose = False):
+def _main(dryrun = False, first = False, verbose = False,
+          p2f_shortlog = '/home/grad/htelg/script_inits_logs/scrapehrrr.log',
+            path2raw = '/home/grad/htelg/tmp/hrrr_tmp/',
+            path2projected_individual = '/home/grad/htelg/tmp/hrrr_tmp_inter/',
+            path2projected_final = '/nfs/stu3data2/Model_data/HRRR/HRRRv4_conus_projected/',
+            ftp_server = 'ftp.ncep.noaa.gov',
+            ftp_path2files = '/pub/data/nccf/com/hrrr/prod',
+            ):
+    
     #### execute the program
     #### -------
     messages = ['run started {}\n========='.format(pd.Timestamp(datetime.datetime.now()))]
     messages.append(f'scrape_hrrr_conus_nat version {version}')
-    p2f_shortlog = '/export/htelg/tmp/log.txt'
+   
     errors = []
     abort = False
     exit_status = 'fail'
@@ -203,7 +211,11 @@ def main(dryrun = False, first = False, verbose = False):
         if verbose:
             print(f'number of hrrr_scrape processes running: {no_of_processes_running}')
         mem = psutil.virtual_memory()
-        no_of_cpu = round((100 - mem.percent - 15)/20)
+        mem_keep = 2 # GiB; assure this much of mememory stay available
+        mem_per_process = 6 # GiB, this is the amount of memory that is needed for each process
+        mem_avalable = mem.available * 1e-9
+        no_of_cpu = np.floor((mem_avalable-mem_keep) / mem_per_process)
+        # no_of_cpu = round((100 - mem.percent - 15)/20)
         if verbose:
             print(f'numper of cpus: {no_of_cpu}')
         messages.append(f'numper of cpus: {no_of_cpu}')
@@ -254,15 +266,16 @@ def main(dryrun = False, first = False, verbose = False):
             for ns in new_stations:
                 assert(ns['abbreviation'] not in [s.abb for s in gml_sites.stations._stations_list]), f"Station with abbriviation {ns['abbreviation']} already exists in gml_sites"
                 gml_sites.add_station(ms.Station(**ns))
-                                               
+                             
+
             #### process 
+            
             pp =  hrrr_lab.ProjectorProject(gml_sites, 
-                                             path2raw = '/export/htelg/tmp/hrrr_tmp/',
-                                             path2projected_individual = '/export/htelg/tmp/hrrr_tmp_inter/',
-                                             # path2projected_final = '/mnt/telg/projects/smoke_at_gml_sites/data/wrfnat/',
-                                             path2projected_final = '/nfs/stu3data2/Model_data/HRRR/HRRRv4_conus_projected/',
-                                             ftp_server = 'ftp.ncep.noaa.gov',
-                                             ftp_path2files = '/pub/data/nccf/com/hrrr/prod',
+                                             path2raw = path2raw,
+                                             path2projected_individual = path2projected_individual,
+                                             path2projected_final = path2projected_final,
+                                             ftp_server = ftp_server,
+                                             ftp_path2files = ftp_path2files,
                                              max_forcast_interval= 18
                                              )
             if first:
@@ -396,14 +409,17 @@ def main(dryrun = False, first = False, verbose = False):
     
     return retrieval
     
-if __name__ == '__main__':
+# if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(description = 'Say hello')
     parser.add_argument('-d', '--dry', help='testing: will stop before execution.',  action='store_true')
     parser.add_argument('-f', '--first', help='testing: process only the very first enty.',  action='store_true')
     parser.add_argument('-v', '--verbose', help='verbose',  action='store_true')
     args = parser.parse_args()
 
-    retrieval = main(dryrun = args.dry, first = args.first, verbose = args.verbose)
+    retrieval = _main(dryrun = args.dry, first = args.first, verbose = args.verbose)
     auto = prolab.Automation(retrieval, product_name='scrape_hrrr')
     auto.log()
     
+if __name__ == '__main__':
+    main()

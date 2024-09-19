@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=46.4.0", "wheel", "setuptools_scm"]
+#requires = ["setuptools", "wheel", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hrrr_scraper"
+authors = [{ name = "Hagen Telg", email = "hagen.telg@gmail.com" }]
+description = "Python library to extract data from hrrr-products!!!"
+license = { file = "LICENSE" }
+dynamic = ["version"]
+
+[project.urls]
+#Documentation = "https://github.com/hagne/SURFRAD"  # or your documentation URL
+Repository = "https://github.com/hagne/hrrr_scraper"
+
+[tool.setuptools]
+packages = ["hrrr_scraper"]
+
+[tool.setuptools_scm]
+write_to = "_version.py"  # Path to write the version file
+
+[project.scripts]
+scrape_hrrr = "hrrr_scraper.scripts.scrape_hrrr:main"
