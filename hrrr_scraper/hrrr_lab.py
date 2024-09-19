@@ -124,7 +124,8 @@ class ProjectorProject(object):
                  # ftp_path2files = '/pub/data/nccf/com/hrrr/prod',
                  ftp_server = 'ftp.ncep.noaa.gov',
                  ftp_path2files = '/pub/data/nccf/com/hrrr/prod',
-                 max_forcast_interval= 18):
+                 max_forcast_interval= 18,
+                 verbose = False):
         """
         https://nomads.ncep.noaa.gov/
 
@@ -166,13 +167,15 @@ class ProjectorProject(object):
         
         self._ftp = None
         self._workplan = None
-        self.verbose = False
+        self.verbose = verbose
         self.remove_from_workplan_when_output_exists = True
         
         
     @property
     def ftp(self):
         if isinstance(self._ftp, type(None)):
+            if self.verbose:
+                print('Connect to ftp', end = ' ... ')
             ftp = ftplib.FTP(self.ftp_server) 
             ftp.login(self.ftp_login, self.ftp_password) 
             # out['ftp'] = ftp
@@ -181,6 +184,8 @@ class ProjectorProject(object):
             # if verbose:
             #     print(bla)
             self._ftp = ftp
+            if self.verbose:
+                print('done')
         return self._ftp
         
     @property
@@ -196,7 +201,13 @@ class ProjectorProject(object):
                 return out
             #get all files from relevant folders
             files_all = []
+            
+            if self.verbose:
+                print('get list of files from ftp', end = '...')
             daysonftp = self.ftp.nlst()
+            if self.verbose:
+                print('done')
+                
             daysonftp = [d for d in daysonftp if 'hrrr' in d]
             if self.verbose:
                 print(f'ftp: available days: {daysonftp}')
@@ -211,9 +222,12 @@ class ProjectorProject(object):
                 if self.verbose:
                     print(f'ftp: whats here: {self.ftp.nlst()}')
                     print('ftp: entering conus')
+                    
                 self.ftp.cwd('conus') # there is also alaska, which might be of interest in the future
 
                 #list files
+                if self.verbose:
+                    print('ftp: get files', end = ' ... ', flush=True)
                 files = self.ftp.nlst()
                 if self.verbose:
                     # print(f'ftp: whats here: {files}')

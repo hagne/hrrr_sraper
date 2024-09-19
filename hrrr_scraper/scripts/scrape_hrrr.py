@@ -246,6 +246,8 @@ def _main(dryrun = False, first = False, verbose = False,
             if verbose:
                 print('aborted, process still running')
         else:
+            if verbose:
+                print('get sites')
             gml_sites = atmPy.data_archives.noaa_gml.get_all_sites()
             # extra from Betsy
             gml_sites.add_station(ms.Station(abbreviation= 'GBN',name = 'Great Basin NP', state='NV', lat=39.005147, lon= -114.215994, alt = 2061))
@@ -269,15 +271,21 @@ def _main(dryrun = False, first = False, verbose = False,
                              
 
             #### process 
-            
+            if verbose:
+                print('start processing over at hrrr_lab')
             pp =  hrrr_lab.ProjectorProject(gml_sites, 
                                              path2raw = path2raw,
                                              path2projected_individual = path2projected_individual,
                                              path2projected_final = path2projected_final,
                                              ftp_server = ftp_server,
                                              ftp_path2files = ftp_path2files,
-                                             max_forcast_interval= 18
+                                             max_forcast_interval= 18,
+                                             verbose = verbose
                                              )
+            if verbose:
+                print('generate workplan', end = ' ... ', flush=True)
+                pp.workplan
+                print('done')
             if first:
                 pp.workplan = pp.workplan.iloc[[0], :]
             no_of_files_generated = pp.workplan.shape[0]
