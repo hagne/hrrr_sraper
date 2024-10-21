@@ -214,7 +214,7 @@ def _main(dryrun = False, first = False, verbose = False,
         mem_keep = 2 # GiB; assure this much of mememory stay available
         mem_per_process = 6 # GiB, this is the amount of memory that is needed for each process
         mem_avalable = mem.available * 1e-9
-        no_of_cpu = np.floor((mem_avalable-mem_keep) / mem_per_process)
+        no_of_cpu = int(np.floor((mem_avalable-mem_keep) / mem_per_process))
         # no_of_cpu = round((100 - mem.percent - 15)/20)
         if verbose:
             print(f'numper of cpus: {no_of_cpu}')
@@ -297,6 +297,7 @@ def _main(dryrun = False, first = False, verbose = False,
             if no_of_files_generated == 0:
                 exit_status = 'no_files_on_server'
             else:
+                print(f'no_of_cpu: {no_of_cpu}, {type(no_of_cpu)}')
                 out = pp.process(no_of_cpu=no_of_cpu, verbose = verbose)
                 
                 # out_bdl = scrapelab.concat2daily_files()
