@@ -21,4 +21,4 @@ packages = ["hrrr_scraper"]
 write_to = "_version.py"  # Path to write the version file
 
 [project.scripts]
-scrape_hrrr = "hrrr_scraper.scripts.scrape_hrrr:main"
+scrape_hrrr = "hrrr_scraper.scripts.scrape_hrrr_2_1:main"

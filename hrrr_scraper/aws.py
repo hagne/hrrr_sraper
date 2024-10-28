@@ -9,11 +9,16 @@ Created on Fri Jan  7 15:41:20 2022
 # -*- coding: utf-8 -*-
 import pathlib as _pl
 import pandas as _pd
+import xarray as _xr
 import s3fs as _s3fs
 # import urllib as _urllib
 # import html2text as _html2text
 import psutil as _psutil
 import numpy as _np
+
+
+import hrrr_scraper.hrrr_lab
+# import hrrr_scraper.aws
 # import xarray as _xr
 
 def readme():
@@ -21,7 +26,115 @@ def readme():
     print(f'follow link for readme: {url}')
 
 
-class AwsQuery(object):
+class HrrrScraperAWSDaily(object):
+    def __init__(self,
+                 path2out = '/nfs/stu3data2/Model_data/HRRR/HRRRv4_conus_projected/',
+                 path2temp_raw = '/home/grad/htelg/tmp/hrrr_tmp/',
+                 path2temp_projections = '/home/grad/htelg/tmp/hrrr_tmp_inter/',
+                 name_pattern =  'smoke_at_gml_{date}.nc',
+                 start = '2024-10-14',  
+                 end = '2024-10-16',
+                 max_forcast_interval=18,
+                 reporter = None, 
+                 sites = None):
+        self.p2fldcc = _pl.Path(path2out)
+        self.path2raw= path2temp_raw
+        self.path2projected_individual = path2temp_projections
+        # self.path2projected_final= path2projected_final
+        self.max_forcast_interval = max_forcast_interval
+        self.name_pattern = name_pattern
+        # end = pd.Timestamp.now().date()
+        self.end = _pd.to_datetime(end)
+        self.start = _pd.to_datetime(start) #end - pd.to_timedelta(10, 'd')
+        self.reporter = reporter
+        self.sites = sites
+
+        
+        self._wp = None
+
+    @property
+    def workplan(self):
+        if isinstance(self._wp, type(None)):
+            wp = _pd.DataFrame(index = _pd.date_range(self.start, self.end, freq='d'), columns= ['path2file_concat'])
+
+            def row2p2fn(row):
+                dt = row.name
+                fn = self.name_pattern.format(date = f'{dt.year:04d}{dt.month:02d}{dt.day:02d}')
+                p2fn = self.p2fldcc.joinpath(fn)
+                return p2fn
+            wp['path2file_concat'] = wp.apply(lambda row: row2p2fn(row), axis = 1)
+            
+            row = wp.iloc[0]
+            row
+            
+            #remove if files exist
+            wp = wp[~(wp.apply(lambda row: row.path2file_concat.is_file(), axis = 1))]
+            self._wp = wp
+        return self._wp
+
+
+    def process(self, no_of_cpu=3, verbose = False):
+        for idx, hsdrow in self.workplan.iterrows():
+            if verbose:
+                print(f'starting: {hsdrow}')
+            # sites = gml_sites
+            
+            pp = hrrr_scraper.hrrr_lab.ProjectorProject(self.sites,
+                                           path2raw=self.path2raw,
+                                           path2projected_individual = self.path2projected_individual,
+                                           path2projected_final= '/tmp',# this is actually not used... fix in hrrr_lab #self.path2projected_final,
+                                           fname_prefix = self.name_pattern.split('{')[0],
+                                           # ftp_path2files='/pub/data/nccf/com/hrrr/prod',
+                                           # aws_path=False,
+                                           # ftp_server='ftp.ncep.noaa.gov',
+                                           ftp_server=False,
+                                           aws_path='noaa-hrrr-bdp-pds',
+                                           start=hsdrow.name,
+                                           end=hsdrow.name+ _pd.to_timedelta(0.99999999999,'d'),
+                                           max_forcast_interval=self.max_forcast_interval,
+                                           reporter = self.reporter
+                                        )
+
+            pp.process(no_of_cpu=no_of_cpu, verbose=True)
+
+            if pp.workplan.cycle_datetime.max().date() < _pd.Timestamp.utcnow().date():
+                try:
+                    ds = _xr.open_mfdataset(pp.workplan.path2file)
+                    p2fo = hsdrow.path2file_concat
+                    ds['datetime'].encoding.update({'units': 'seconds since 2024-10-16'})
+                    ds['argmin_x'].encoding.update({'dtype': 'float32'})
+                    ds['argmin_y'].encoding.update({'dtype': 'float32'})
+                    ds['lat_g'].encoding.update({'dtype': 'float32'})
+                    ds['lon_g'].encoding.update({'dtype': 'float32'})
+                    ds['lat_s'].encoding.update({'dtype': 'float32'})
+                    ds['lon_s'].encoding.update({'dtype': 'float32'})
+                    ds['dist_min'].encoding.update({'dtype': 'float32'})
+
+                    ds.to_netcdf(p2fo)
+
+                    #remove projection files
+                    for f in pp.workplan.path2file:
+                        f.unlink()
+                        
+                except:
+                    if not isinstance(self.reporter, type(None)):
+                        self.reporter.errors_increment(pp.workplan.shape[0])
+                        self.reporter.wrapup()
+
+                    raise
+            else:
+                if verbose:
+                    print('Concatination skip, as day is not finished.')
+                
+
+        return 
+
+
+
+
+
+
+class DeprecatedAwsQuery(object):
     def __init__(self,
                  path2folder_local = '/mnt/telg/tmp/aws_tmp/',
                  # satellite = '16',
@@ -33,6 +146,7 @@ class AwsQuery(object):
                  forcast_hours = [6,12],
                  process = None,
                  keep_files = None,
+                 overwrite = False,
                 ):
         """
         This will initialize a search on AWS.
@@ -84,6 +198,7 @@ class AwsQuery(object):
         self.cycle_hours = cycle_hours
         self.forcast_hours = forcast_hours
         self.path2folder_local = _pl.Path(path2folder_local)
+        self.overwrite = overwrite
         
         if isinstance(process, dict):
             self._process = True
@@ -160,17 +275,19 @@ class AwsQuery(object):
             df['path'] = df.apply(lambda row: self.path2folder_aws.joinpath(f'hrrr.{row.name.year}{row.name.month:02d}{row.name.day:02d}').joinpath(self.domain).joinpath('*'), axis= 1)
             
             # get the path to each file in all the folders 
-            cyclhours = [f't{ch:02d}z' for ch in self.cycle_hours]
+            # cyclhours = [f't{ch:02d}z' for ch in self.cycle_hours]
             files_available = []
             for idx,row in df.iterrows():
                 fat = self.aws.glob(row.path.as_posix())
                 # get grib files only
+                # print(f'found {len(fat)} files')
                 fat = [f for f in fat if (self.configuration in f) and (f[-6:] == '.grib2')]
                 # # select desired cycle hourse ... lets do this later!
                 # if self.cycle_hours != 'all':
                 #     cyclhours = [f't{ch:02d}z' for ch in self.cycle_hours]
                 #     fat = [f for f in fat if f.split('/')[-1].split('.')[1] in cyclhours]
                 # break
+                # print(f'found {len(fat)} files')
                 files_available += fat
             
             #### Make workplan
@@ -181,19 +298,20 @@ class AwsQuery(object):
             workplan.index = workplan.datetime_cycle
             workplan['forecast_hour'] = workplan.apply(lambda row: int(row.path2file_aws.name.split('.')[2][-2:]), axis = 1)
             workplan['datetime_forecast'] = workplan.apply(lambda row: row.date + _pd.to_timedelta(row.cycle_hour, 'hour') + _pd.to_timedelta(row.forecast_hour, 'hour'), axis = 1)
-            
+            self.tp_wpI = workplan.copy()
             # select forcast hours and cycle_hours if specified
             if self.forcast_hours != 'all':
                 workplan = workplan[workplan.forecast_hour.isin(self.forcast_hours)].copy()
                 
             if self.cycle_hours != 'all':
                 workplan = workplan[workplan.cycle_hour.isin(self.cycle_hours)].copy()
-            
+            self.tp_wpII = workplan.copy()
             # generate path to local copy of grib file
             workplan['path2file_local'] = workplan.apply(lambda row: self.path2folder_local.joinpath(f'hrrr.{self.configuration}.{row.date.year}{row.date.month:02d}{row.date.day:02d}.{row.cycle_hour:02d}.{row.forecast_hour}.grib2'), axis = 1)
             
             #### remove if local file exists
-            if not self._process:
+            # if not self._process:
+            if not self.overwrite:
                 workplan = workplan[~workplan.apply(lambda row: row.path2file_local.is_file(), axis = 1)]
             
             # truncate - this only really relevant if start end end have times in addition to the dates

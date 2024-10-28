@@ -10,9 +10,13 @@ import pathlib as pl
 #import shutil
 import pandas as pd
 #import psutil
+import psutil
 
-import multiprocessing as mp
+# import multiprocessing as mp
+import multiprocessing 
 import time
+import s3fs as _s3fs
+
 
 # import sys
 
@@ -120,11 +124,21 @@ class ProjectorProject(object):
                  path2raw = '/mnt/telg/tmp/hrrr_tmp/',
                  path2projected_individual = '/mnt/telg/tmp/hrrr_tmp_inter/',
                  path2projected_final = '/mnt/telg/projects/smoke_at_gml_sites/data/wrfnat/',
+                 fname_prefix = '',
+                 reporter = None,
                  # ftp_server = 'ftp.ncep.noaa.gov',
                  # ftp_path2files = '/pub/data/nccf/com/hrrr/prod',
+                 max_forcast_interval= 18,
+                 #### FTP
                  ftp_server = 'ftp.ncep.noaa.gov',
                  ftp_path2files = '/pub/data/nccf/com/hrrr/prod',
-                 max_forcast_interval= 18,
+                 #### AWS
+                 aws_path = 'noaa-hrrr-bdp-pds',
+                 configuration = 'wrfnat',
+                 domain = 'conus',
+                 start = '2020-08-08 20:00:00', 
+                 end = '2020-08-09 18:00:00',
+                 #### Other
                  verbose = False):
         """
         https://nomads.ncep.noaa.gov/
@@ -154,25 +168,49 @@ class ProjectorProject(object):
         # self.list_of_files_onftp = None
         # self.list_of_files_onftp = None
         self.max_forcast_interval= max_forcast_interval
-        
+        self.fname_prefix = ''
         self.sites = sites
         self.local_file_source = False
+        # print(f'assssfssf: {path2raw}')
         self.path2data_tmp = pl.Path(path2raw)
         self.path2data = pl.Path(path2projected_individual)
         self.path2concatfiles = pl.Path(path2projected_final)
-        self.ftp_server = ftp_server
-        self.ftp_login = ''
-        self.ftp_password = ''
-        self.ftp_path2files = ftp_path2files
+        self.reporter = reporter
+
+        assert(not (ftp_server and aws_path)), '"ftp_server" and "aws_path" can not both be True'
         
-        self._ftp = None
+
+        if ftp_server:
+            self._contype = 'ftp'
+            self.ftp_server = ftp_server
+            self.ftp_login = ''
+            self.ftp_password = ''
+            self.ftp_path2files = ftp_path2files
+            self.concat = True
+            self._ftp = None
+
+        elif aws_path:
+            self._contype = 'aws'
+            self.path2folder_aws = pl.Path(aws_path)
+            self.aws = _s3fs.S3FileSystem(anon=True)
+            self.aws.clear_instance_cache() # strange things happen if the is not the only query one is doing during a session
+            self.start = start
+            self.end = end
+            self.domain = domain
+            self.configuration = configuration
+            self.concat = False
+            
+        else:
+            raise ValueError('Eighter "ftp_server" or "aws_path" have to be set')
+            
         self._workplan = None
         self.verbose = verbose
-        self.remove_from_workplan_when_output_exists = True
+        # self.remove_from_workplan_when_output_exists = True
         
         
     @property
     def ftp(self):
+        assert(self._contype == 'ftp'), "You are not using FTP ... arn't you?"
         if isinstance(self._ftp, type(None)):
             if self.verbose:
                 print('Connect to ftp', end = ' ... ')
@@ -200,54 +238,83 @@ class ProjectorProject(object):
             #         out = np.nan
                 return out
             #get all files from relevant folders
-            files_all = []
-            
-            if self.verbose:
-                print('get list of files from ftp', end = '...')
-            daysonftp = self.ftp.nlst()
-            if self.verbose:
-                print('done')
+            if self._contype == 'ftp':
+                files_all = []
                 
-            daysonftp = [d for d in daysonftp if 'hrrr' in d]
-            if self.verbose:
-                print(f'ftp: available days: {daysonftp}')
-            for day in daysonftp:
                 if self.verbose:
-                    print(f'ftp: enter day: {day}')
+                    print('get list of files from ftp', end = '...')
+                daysonftp = self.ftp.nlst()
+                if self.verbose:
+                    print('done')
                     
-                self.ftp.cwd(self.ftp_path2files) # not really needed in first loop, but in second!
-            #     break
-                # enter relevant folders
-                self.ftp.cwd(day)
+                daysonftp = [d for d in daysonftp if 'hrrr' in d]
                 if self.verbose:
-                    print(f'ftp: whats here: {self.ftp.nlst()}')
-                    print('ftp: entering conus')
+                    print(f'ftp: available days: {daysonftp}')
+                for day in daysonftp:
+                    if self.verbose:
+                        print(f'ftp: enter day: {day}')
+                        
+                    self.ftp.cwd(self.ftp_path2files) # not really needed in first loop, but in second!
+                #     break
+                    # enter relevant folders
+                    self.ftp.cwd(day)
+                    if self.verbose:
+                        print(f'ftp: whats here: {self.ftp.nlst()}')
+                        print('ftp: entering conus')
+                        
+                    self.ftp.cwd('conus') # there is also alaska, which might be of interest in the future
+    
+                    #list files
+                    if self.verbose:
+                        print('ftp: get files', end = ' ... ', flush=True)
+                    files = self.ftp.nlst()
+                    if self.verbose:
+                        # print(f'ftp: whats here: {files}')
+                        print(f'ftp: no of files in here {len(files)}')
+                    # only get the grib files
+                    files = [f for f in files if f.split('.')[-1] == 'grib2']
+                    if self.verbose:
+                        # print(f'ftp: whats here: {files}')
+                        print(f'ftp: no of files ending on grib {len(files)}')
+                    # wrfnat has the 3d data, there are other files of smaller sized which are merely a subset of values, e.g. surface values
+                    files =[f for f in files if 'wrfnat' in f.split('.')[-2]]
+                    if self.verbose:
+                        # print(f'ftp: whats here: {files}')
+                        print(f"ftp: no of files with: if 'wrfnat' in f.split('.')[-2]: {len(files)}")
+                    # add full path to list of files
+                    fld_current = pl.Path(self.ftp.pwd())
+                    files_all += [fld_current.joinpath(f) for f in files]
+                
+                self.ftp.close()
+                self._ftp = None
                     
-                self.ftp.cwd('conus') # there is also alaska, which might be of interest in the future
-
-                #list files
-                if self.verbose:
-                    print('ftp: get files', end = ' ... ', flush=True)
-                files = self.ftp.nlst()
-                if self.verbose:
-                    # print(f'ftp: whats here: {files}')
-                    print(f'ftp: no of files in here {len(files)}')
-                # only get the grib files
-                files = [f for f in files if f.split('.')[-1] == 'grib2']
-                if self.verbose:
-                    # print(f'ftp: whats here: {files}')
-                    print(f'ftp: no of files ending on grib {len(files)}')
-                # wrfnat has the 3d data, there are other files of smaller sized which are merely a subset of values, e.g. surface values
-                files =[f for f in files if 'wrfnat' in f.split('.')[-2]]
-                if self.verbose:
-                    # print(f'ftp: whats here: {files}')
-                    print(f"ftp: no of files with: if 'wrfnat' in f.split('.')[-2]: {len(files)}")
-                # add full path to list of files
-                fld_current = pl.Path(self.ftp.pwd())
-                files_all += [fld_current.joinpath(f) for f in files]
-            
+            elif self._contype == 'aws':
+                df = pd.DataFrame(index = pd.date_range(self.start, self.end, freq='d'), columns=['path'])
+                # create the path to the directory of each row above
+                df['path'] = df.apply(lambda row: self.path2folder_aws.joinpath(f'hrrr.{row.name.year}{row.name.month:02d}{row.name.day:02d}').joinpath(self.domain).joinpath('*'), axis= 1)
+                
+                # get the path to each file in all the folders 
+                # cyclhours = [f't{ch:02d}z' for ch in self.cycle_hours]
+                files_all = []
+                for idx,row in df.iterrows():
+                    fat = self.aws.glob(row.path.as_posix())
+                    # get grib files only
+                    # print(f'found {len(fat)} files')
+                    fat = [pl.Path(f) for f in fat if (self.configuration in f) and (f[-6:] == '.grib2')]
+                    # # select desired cycle hourse ... lets do this later!
+                    # if self.cycle_hours != 'all':
+                    #     cyclhours = [f't{ch:02d}z' for ch in self.cycle_hours]
+                    #     fat = [f for f in fat if f.split('/')[-1].split('.')[1] in cyclhours]
+                    # break
+                    # print(f'found {len(fat)} files')
+                    files_all += fat
+            else:
+                assert(False), 'not possible'
             # make the workplan from file list
             list_of_files_onftp = files_all
+            self.tp_lof = files_all.copy()
+
+            
             path2data = self.path2data
             path2data_tmp = self.path2data_tmp 
             max_forcast_interval = self.max_forcast_interval
@@ -267,22 +334,21 @@ class ProjectorProject(object):
             workplan['path2tempfile'] = workplan.apply(lambda row: path2data_tmp.joinpath(row.files_on_ftp.name), axis=1)
             
             ### generate output path
-            workplan['path2file']  = workplan.apply(lambda row: path2data.joinpath(f'{row.cycle_datetime.year:04d}{row.cycle_datetime.month:02d}{row.cycle_datetime.day:02d}_{row.cycle_datetime.hour:02d}_fi{row.forcast_interval:02d}' + '.nc'), axis=1)
+            workplan['path2file']  = workplan.apply(lambda row: path2data.joinpath(f'{self.fname_prefix}{row.cycle_datetime.year:04d}{row.cycle_datetime.month:02d}{row.cycle_datetime.day:02d}_{row.cycle_datetime.hour:02d}_fi{row.forcast_interval:02d}' + '.nc'), axis=1)
             
             ### only files that don't exist yet
             # if self.verbose:
             #     # print(f'ftp: whats here: {files}')
             #     print(f'ftp: no of files that do not exist yet {len(files)}')
-            workplan['output_file_exits'] = workplan.apply(lambda row: row.path2file.is_file(), axis=1)
-            
-            if self.remove_from_workplan_when_output_exists:
-                workplan = workplan[~workplan.output_file_exits].copy()
+            # workplan['output_file_exits'] = workplan.apply(lambda row: row.path2file.is_file(), axis=1)
+
+            ### The following is removed as we want the have all files for the concatination
+            # if self.remove_from_workplan_when_output_exists:
+            #     workplan = workplan[~workplan.output_file_exits].copy()
             
             workplan.sort_values(['cycle_datetime', 'forcast_interval'], inplace= True)
             
             self._workplan = workplan
-            self.ftp.close()
-            self._ftp = None
         return self._workplan
     
     @workplan.setter
@@ -298,9 +364,152 @@ class ProjectorProject(object):
             file.unlink()
             
         return 
+
+    def process_row(self,row,
+                    error_queue = None,
+                     verbose = False, ):
+        try:
+            wpe = WorkplanEntry(row, project = self, verbose = verbose)
+            wpe.process()
+        except Exception as e:
+            if verbose:
+                print(e, flush = True)
+            if isinstance(error_queue, type(None)):
+                raise 
+            error_queue.put(e)
+        return 
+        
+    def process(self, no_of_cpu = 3,
+                timeout = 60*60, 
+                sleeptime = 1, 
+                test = False, verbose = False):
+        # def process_workplan_row(row):
+        #     wpe = WorkplanEntry(self, row)
+        #     wpe.process()
+        #     return 
+        self.remove_artefacts()        
+        out = {}
+        if self.workplan.shape[0] == 0:
+            print('noting to process')
+            return
+        elif test == 2:
+            wpt = self.workplan.iloc[:1]
+        elif test == 3:
+            wpt = self.workplan.iloc[:no_of_cpu]
+        else:
+            wpt = self.workplan
+        
+        if no_of_cpu == 1:
+            for idx, row in wpt.iterrows():
+                self.process_row(row)
+                # wpe = WorkplanEntry(row, project = self, verbose = verbose)
+                # wpe.process()
+        else:
+            iterator = self.workplan.iterrows()
+            process_this = self.process_row    
+            
+            # only if spawning new processes will every thing work well
+            if multiprocessing.get_start_method() != 'spawn':
+                multiprocessing.set_start_method('spawn', force = True)
+                
+            processes = []
+            error_queue = multiprocessing.Queue()
+            while 1:      
+                #### catch errors
+                # catch errors in the individual subprocess, to avoid scenarios where all files are downloaded but not processed
+                # Also, here is the place where certain errors can be filtered out.
+                while not error_queue.empty():
+                    e = error_queue.get()
+                    do_raise = True
+                    msg = False
+                    # if isinstance(e, GranuleMissmatchError):
+                    #     if skip_granule_missmatch_error:
+                    #         do_raise = False
+                    #         msg = 'GME'
+                    # elif isinstance(e, NoGranuleFoundError):
+                    #     if skip_granule_missmatch_error:
+                    #         do_raise = False
+                    #         msg = 'NGFE'
+                            
+                    if do_raise:
+                        for process in processes:
+                            process.terminate()
+                        raise(e)
+                    else:
+                        if msg:
+                            print(msg, end = ' ')
+                
+                #### report current progress
+                if not isinstance(self.reporter, type(None)):
+                    self.reporter.log()
+                    
+                for process in processes:
+                    # process.join(timeout=2)
+                    if process.is_alive():
+                        p = psutil.Process(process.pid)
+                        dt_in_sec = (pd.Timestamp.now(tz = 'utc') - pd.to_datetime(p.create_time(), unit = 's', utc = True)) / pd.to_timedelta(1,'s')
+                        assert(dt_in_sec > 0), 'process elaps time is smaller 0, its process creation time is probably not in utc! todo: find out how to determine the timezone that is used by psutil'
+                        # print(dt_in_sec)
+                        if dt_in_sec > timeout:
+                            print(f"Process for number {process.name} exceeded the timeout and will be terminated.")
+                            process.terminate()
+                    else:
+                        proc = processes.pop(processes.index(process))
+                        if not isinstance(self.reporter, type(None)):
+                            if proc.exitcode == 0:
+                                self.reporter.clean_increment()
+                            elif proc.exitcode == -15: #process was killed due to timeout. 
+                                self.reporter.errors_increment()
+                            elif proc.exitcode == -9: #process was killed externally, e.g. by the out of memory killer, or someone killed it by hand? 
+                                self.reporter.errors_increment()
+                            elif proc.exitcode == 1: #process generated an exception that should be rison further down
+                                self.reporter.errors_increment()
+                            else:
+                                if not error_queue.empty():
+                                    e = error_queue.get()
+                                    raise(e)
+                                assert(False), f'exitcode is {proc.exitcode}. What does that mean?'
+                        #### TODO: Test what the result of this process was. If it resulted in an error, make sure you know the error or stopp the entire process!!!
+                    
+                    
+                if len(processes) >= no_of_cpu:  
+                    # print('|', end = '')
+                    time.sleep(sleeptime)
+                    continue
+                else:
+                    try:
+                        idx,arg = next(iterator)
+                        # print(arg)
+                    except StopIteration:
+                        # print('reached last number')
+                        if len(processes) == 0:
+                            break
+                        else:         
+                            time.sleep(sleeptime)
+                            continue
+                        
+                    process = multiprocessing.Process(target=process_this, 
+                                                      args=(arg,error_queue),  # positional arguments
+                                                      # kwargs={'skip_granule_missmatch_error': skip_granule_missmatch_error,
+                                                      #         'skip_no_granule_found_error': skip_no_granule_found_error,
+                                                      #         'skip_http_error': skip_http_error,
+                                                      #         'skip_multiple_file_on_server_error': skip_multiple_file_on_server_error,
+                                                      #        },  # keyword arguments 
+                                                      name = 'hrrrscraper')
+                    process.daemon = True
+                    processes.append(process)
+                    process.start()
+                    print('.', end = '')
+
+        
+        if test == False and self.concat:
+            concat = Concatonator(path2scraped_files = self.path2data,
+                         path2concat_files = self.path2concatfiles,)
+            concat.save()
+            out['concat'] = concat
+        return out
     
-    
-    def process(self, no_of_cpu = 3, test = False, verbose = False):
+    def deprecated_process(self, no_of_cpu = 3, test = False, verbose = False):
         # def process_workplan_row(row):
         #     wpe = WorkplanEntry(self, row)
         #     wpe.process()
@@ -319,7 +528,7 @@ class ProjectorProject(object):
         
         if no_of_cpu == 1:
             for idx, row in wpt.iterrows():
-                wpe = WorkplanEntry(row, project = self)
+                wpe = WorkplanEntry(row, project = self, verbose = verbose)
                 wpe.process()
         else:
             pool = mp.Pool(processes=no_of_cpu)
@@ -333,20 +542,20 @@ class ProjectorProject(object):
             
             pool.close() # no more tasks
             pool.join()
-        if test == False:
+
+        
+        if test == False and self.conact:
             concat = Concatonator(path2scraped_files = self.path2data,
                          path2concat_files = self.path2concatfiles,)
             concat.save()
             out['concat'] = concat
         return out
 
-
-
 class WorkplanEntry(object):
     def __init__(self, workplanrow, project = None, autorun = False, verbose = False):
         self.project = project
         self.row = workplanrow
-        self.verbose = True
+        self.verbose = verbose
         
         self._hrrr_inst = None
         self._projection = None
@@ -356,13 +565,18 @@ class WorkplanEntry(object):
     
     def download(self):
         if not self.row.path2tempfile.is_file():
-            ftp = ftplib.FTP(self.project.ftp_server) 
-            ftp.login(self.project.ftp_login, self.project.ftp_password) 
-    #         out['ftp'] = ftp
-            ### navigate on ftp
-            # ftp.cwd(ftp_path2files)
-            ftp.retrbinary(f'RETR {self.row.files_on_ftp}', open(self.row.path2tempfile, 'wb').write)
-            ftp.close()
+            if self.project._contype == 'ftp':
+                ftp = ftplib.FTP(self.project.ftp_server) 
+                ftp.login(self.project.ftp_login, self.project.ftp_password) 
+        #         out['ftp'] = ftp
+                ### navigate on ftp
+                # ftp.cwd(ftp_path2files)
+                ftp.retrbinary(f'RETR {self.row.files_on_ftp}', open(self.row.path2tempfile, 'wb').write)
+                ftp.close()
+            elif self.project._contype == 'aws':
+                self.project.aws.get(self.row.files_on_ftp.as_posix(), self.row.path2tempfile.as_posix())
+            else:
+                assert(False), 'nenenenenene, geht nich'
         else:
             if self.verbose:
                 print('file exist ... skip!', end = '...')
@@ -382,7 +596,97 @@ class WorkplanEntry(object):
     def save_projection(self):
         self.projection.save(self.row.path2file, cycle_datetime = self.row.cycle_datetime, forcast_hour = self.row.forcast_interval)
     
-    def process(self, remove_grib_file = True, verbose = False):
+    def process(self, remove_grib_file = True, verbose = None):
+        if isinstance(verbose, type(None)):
+            verbose = self.verbose
+            
+        if self.row.path2file.is_file():
+            if verbose:
+                print('output file exists ... skip')
+            return 1
+        if verbose:
+            print('dl', end = '')
+        self.download()
+        if verbose:
+            print('.', end = '')
+            print('pr', end = '')
+        self.projection
+        self._hrrr_inst = None # with this I am hoping to save up some memory a little bit earlier then it would otherwise
+        if verbose:
+            print('.', end = '')
+            print('s', end = '')
+        self.save_projection()
+        if verbose:
+            print('.', end = '')
+        self._projection = None # To prevent amemory pileup
+        # hwn = open_grib_file(self.row.path2tempfile)
+        # projection = hwn.project2sites(self.project.sites)
+        # projection.save(self.row.path2file, self.row.cycle_datetime, self.row.forcast_interval)
+        # ds = ds.expand_dims({"forecast_hour": [self.row.forcast_interval], "datetime": [row.cycle_datetime]})
+        if remove_grib_file:            
+            if verbose:
+                print('ul', end = '')
+            self.row.path2tempfile.unlink()
+            
+            if verbose:
+                print('.', end = '')
+        if verbose:
+            print('..', end = '')
+        return 1#hwn 
+
+class DeprecatedWorkplanEntry(object):
+    def __init__(self, workplanrow, project = None, autorun = False, verbose = False):
+        self.project = project
+        self.row = workplanrow
+        self.verbose = verbose
+        
+        self._hrrr_inst = None
+        self._projection = None
+        if autorun:
+            self.process(verbose = verbose)
+        
+    
+    def download(self):
+        if not self.row.path2tempfile.is_file():
+            if self.project._contype == 'ftp':
+                ftp = ftplib.FTP(self.project.ftp_server) 
+                ftp.login(self.project.ftp_login, self.project.ftp_password) 
+        #         out['ftp'] = ftp
+                ### navigate on ftp
+                # ftp.cwd(ftp_path2files)
+                ftp.retrbinary(f'RETR {self.row.files_on_ftp}', open(self.row.path2tempfile, 'wb').write)
+                ftp.close()
+            elif self.project._contype == 'aws':
+                self.project.aws.get(self.row.files_on_ftp.as_posix(), self.row.path2tempfile.as_posix())
+            else:
+                assert(False), 'nenenenenene, geht nich'
+        else:
+            if self.verbose:
+                print('file exist ... skip!', end = '...')
+                
+    @property    
+    def hrrr_inst(self):
+        if isinstance(self._hrrr_inst, type(None)):
+            self._hrrr_inst = open_grib_file(self.row.path2tempfile)
+        return self._hrrr_inst
+    
+    @property
+    def projection(self):
+        if isinstance(self._projection, type(None)):
+            self._projection = self.hrrr_inst.project2sites(self.project.sites)
+        return self._projection
+    
+    def save_projection(self):
+        self.projection.save(self.row.path2file, cycle_datetime = self.row.cycle_datetime, forcast_hour = self.row.forcast_interval)
+    
+    def process(self, remove_grib_file = True, verbose = None):
+        if isinstance(verbose, type(None)):
+            verbose = self.verbose
+            
+        if self.row.path2file.is_file():
+            if verbose:
+                print('output file exists ... skip')
+            return 1
         if verbose:
             print('dl', end = '')
         self.download()
@@ -954,25 +1258,27 @@ def get_univied_above_ground_level_altitude(ds_at_sites):
        9.00e+03, 1.00e+04, 1.10e+04, 1.20e+04, 1.30e+04, 1.40e+04,
        1.50e+04], dtype=np.float32)
     
+    # altitude is given above sealevel not above ground
+    ds_at_sites['altitude'] = ds_at_sites.level_height_geo_potential_vp - ds_at_sites.orography
     
-    ds_at_sites['level_height_above_groundlevel'] = ds_at_sites.level_height_geo_potential_vp - ds_at_sites.orography
-
     # select variables that have vertical resolution
-    vp_vars = [var for var in ds_at_sites.variables if 'level' in ds_at_sites[var].dims][1:]
+    vp_vars = [var for var in ds_at_sites.variables if 'level' in ds_at_sites[var].dims]
     ds_vponly = ds_at_sites[vp_vars]
-
+    
+    ds_vp = []
     for e,site in enumerate(ds_at_sites.site.values):
-        dsvpoas = ds_vponly.sel(site = site)
-        dsvpoas = dsvpoas.swap_dims({'level':'level_height_above_groundlevel'})
-        dsvpoas = dsvpoas.drop(labels='level')
-
-        dsvpoas = dsvpoas.interp(level_height_above_groundlevel = alt_soll)
-        dsvpoas = dsvpoas.rename_dims({'level_height_above_groundlevel': 'altitude'})
-        dsvpoas = dsvpoas.rename({'level_height_above_groundlevel': 'altitude'})
-        if e == 0:
-            ds_vp = dsvpoas
-        else:
-            ds_vp = xr.concat([ds_vp, dsvpoas], dim = 'site')
-
-    ds_at_sites = ds_at_sites.drop(vp_vars+['level']).merge(ds_vp)
+        dsvpoas = ds_vponly.sel(site = [site])
+        # dst = dsvpoas.altitude.squeeze('forecast_hour', drop = True).squeeze('datetime', drop = True).squeeze('site', drop = True)
+        dst = dsvpoas.altitude.squeeze('site', drop = True)
+        dsvpoas = dsvpoas.assign_coords(altitude = dst)
+        dsvpoas = dsvpoas.swap_dims({'level': 'altitude'})
+        dsvpoas = dsvpoas.drop_vars('level')
+        dsvpoas = dsvpoas.interp(altitude = alt_soll)
+        ds_vp.append(dsvpoas)
+    
+    ds_vp = xr.concat(ds_vp, dim = 'site')
+    
+    ds_at_sites = ds_at_sites.drop_vars(vp_vars+['level']).merge(ds_vp)
+    
+    ds_at_sites.altitude.attrs['long_name'] = 'level altitude in meters above ground'
     return ds_at_sites
