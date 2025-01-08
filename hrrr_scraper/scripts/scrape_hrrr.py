@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+I think this should be deprecated!!!  
+
 Created on Wed Nov 11 17:10:44 2020
 
 @author: hagen
