@@ -95,7 +95,7 @@ class HrrrScraperAWSDaily(object):
                                            reporter = self.reporter
                                         )
 
-            pp.process(no_of_cpu=no_of_cpu, verbose=True)
+            pp.process(no_of_cpu=no_of_cpu, verbose=verbose)
 
             if pp.workplan.cycle_datetime.max().date() < _pd.Timestamp.utcnow().date():
                 try:

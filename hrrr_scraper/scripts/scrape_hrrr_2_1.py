@@ -183,7 +183,7 @@ version = '2.1.0'
 #     return out
 
 def _main_gml(dryrun = False, first = False, verbose = False,
-          no_of_cpu = 3,
+          no_of_cpu = 1,
           p2f_shortlog = '/home/grad/htelg/script_inits_logs/scrapehrrr.log',
           path2raw = '/home/grad/htelg/tmp/hrrr_tmp/',
           path2projected_individual = '/home/grad/htelg/tmp/hrrr_tmp_inter/',
@@ -196,6 +196,9 @@ def _main_gml(dryrun = False, first = False, verbose = False,
             # ftp_path2files = '/pub/data/nccf/com/hrrr/prod',
             ):
     
+    if verbose:
+        print("execting _main_gml()")
+        print(f"considert time window: {start}-{end}")
     #### execute the program
     #### -------
     # messages = ['run started {}\n========='.format(pd.Timestamp(datetime.datetime.now()))]
@@ -257,7 +260,7 @@ def _main_gml(dryrun = False, first = False, verbose = False,
         #         print('aborted, process still running')
         else:
             if verbose:
-                print('get sites')
+                print('get sites ... ', end = '')
             gml_sites = atmPy.data_archives.noaa_gml.get_all_sites()
             # extra from Betsy
             gml_sites.add_station(ms.Station(abbreviation= 'GBN',name = 'Great Basin NP', state='NV', lat=39.005147, lon= -114.215994, alt = 2061))
@@ -278,8 +281,10 @@ def _main_gml(dryrun = False, first = False, verbose = False,
             for ns in new_stations:
                 assert(ns['abbreviation'] not in [s.abb for s in gml_sites.stations._stations_list]), f"Station with abbriviation {ns['abbreviation']} already exists in gml_sites"
                 gml_sites.add_station(ms.Station(**ns))
-                             
-
+                
+            if verbose:
+                print('done')
+            
             #### process 
             if verbose:
                 print('start processing over at hrrr_lab')
@@ -297,10 +302,10 @@ def _main_gml(dryrun = False, first = False, verbose = False,
                                                  path2temp_raw = path2raw, #'/home/grad/htelg/tmp/hrrr_tmp/',
                                                  path2temp_projections = path2projected_individual, #'/home/grad/htelg/tmp/hrrr_tmp_inter/',
                                                  name_pattern =  name_pattern,
-                                                 start = '2024-10-14',  
-                                                 end = '2024-10-16',
+                                                 start = start,  
+                                                 end = end,
                                                  max_forcast_interval=18,
-                                                 reporter = reporter)
+                                                 reporter = reporter,)
 
             
             if verbose:
@@ -448,7 +453,7 @@ def main():
     args = parser.parse_args()
     print(f'executing scrape_hrrr version {version}.')
     end = pd.to_datetime(pd.Timestamp.now().date() + pd.to_timedelta(1, 'd'))
-    start = pd.to_datetime('20240101')
+    start = pd.to_datetime('20210101')
     _main_gml(dryrun = args.dry, first = args.first, verbose = args.verbose, start = start, end = end)
     # auto = prolab.Automation(retrieval, product_name='scrape_hrrr')
     # auto.log()
