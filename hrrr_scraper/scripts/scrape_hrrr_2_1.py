@@ -182,7 +182,10 @@ version = '2.1.0'
 #         print('++++++++++++++++++++++++')
 #     return out
 
-def _main_gml(dryrun = False, first = False, verbose = False,
+def _main_gml(what2return = None,
+              #dryrun = False, 
+              first = False, 
+              verbose = False,
           no_of_cpu = 1,
           p2f_shortlog = '/home/grad/htelg/script_inits_logs/scrapehrrr.log',
           path2raw = '/home/grad/htelg/tmp/hrrr_tmp/',
@@ -307,7 +310,8 @@ def _main_gml(dryrun = False, first = False, verbose = False,
                                                  max_forcast_interval=18,
                                                  reporter = reporter,)
 
-            
+            if what2return == 'hsd':
+                return hsd
             if verbose:
                 print('generate workplan', end = ' ... ', flush=True)
                 hsd.workplan
@@ -317,7 +321,7 @@ def _main_gml(dryrun = False, first = False, verbose = False,
             no_of_files_generated = hsd.workplan.shape[0]
             if verbose:
                 print(f'number of files to process: {no_of_files_generated}')
-            if dryrun:
+            if what2return == 'workplan':
                 return hsd.workplan
                 
             if no_of_files_generated == 0:
