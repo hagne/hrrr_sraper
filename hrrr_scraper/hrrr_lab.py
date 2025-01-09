@@ -176,6 +176,7 @@ class ProjectorProject(object):
         self.path2data = pl.Path(path2projected_individual)
         self.path2concatfiles = pl.Path(path2projected_final)
         self.reporter = reporter
+        
 
         assert(not (ftp_server and aws_path)), '"ftp_server" and "aws_path" can not both be True'
         
@@ -204,6 +205,7 @@ class ProjectorProject(object):
             raise ValueError('Eighter "ftp_server" or "aws_path" have to be set')
             
         self._workplan = None
+        self._alltasks = None
         self.verbose = verbose
         # self.remove_from_workplan_when_output_exists = True
         
@@ -226,9 +228,19 @@ class ProjectorProject(object):
                 print('done')
         return self._ftp
         
+    
     @property
     def workplan(self):
         if isinstance(self._workplan, type(None)):
+            workplan = self.alltasks
+            workplan['output_file_exits'] = workplan.apply(lambda row: row.path2file.is_file(), axis=1)
+            workplan = workplan[~workplan.output_file_exits]
+            self._workplan = workplan
+        return self._workplan
+            
+    @property
+    def alltasks(self):
+        if isinstance(self._alltasks, type(None)):
             def fn2datetime(row):
             #     try:
                 day = pd.to_datetime(row.files_on_ftp.parent.parent.name.split('.')[-1])
@@ -340,7 +352,7 @@ class ProjectorProject(object):
             # if self.verbose:
             #     # print(f'ftp: whats here: {files}')
             #     print(f'ftp: no of files that do not exist yet {len(files)}')
-            # workplan['output_file_exits'] = workplan.apply(lambda row: row.path2file.is_file(), axis=1)
+
 
             ### The following is removed as we want the have all files for the concatination
             # if self.remove_from_workplan_when_output_exists:
@@ -348,8 +360,8 @@ class ProjectorProject(object):
             
             workplan.sort_values(['cycle_datetime', 'forcast_interval'], inplace= True)
             
-            self._workplan = workplan
-        return self._workplan
+            self._alltasks = workplan
+        return self._alltasks
     
     @workplan.setter
     def workplan(self, value):

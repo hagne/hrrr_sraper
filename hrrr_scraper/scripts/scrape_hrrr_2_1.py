@@ -182,7 +182,7 @@ version = '2.1.0'
 #         print('++++++++++++++++++++++++')
 #     return out
 
-def _main_gml(what2return = None,
+def _main_gml(what2return = 'None',
               #dryrun = False, 
               first = False, 
               verbose = False,
@@ -198,6 +198,10 @@ def _main_gml(what2return = None,
             # ftp_server = 'ftp.ncep.noaa.gov',
             # ftp_path2files = '/pub/data/nccf/com/hrrr/prod',
             ):
+    
+    w2ropts = ['None', 'workplan', 'hsd']
+    assert (what2return in w2ropts), f'kwarg what2return encountered an unknown value ({what2return}). Chose one of {w2ropts}'
+    
     
     if verbose:
         print("execting _main_gml()")
@@ -458,7 +462,8 @@ def main():
     print(f'executing scrape_hrrr version {version}.')
     end = pd.to_datetime(pd.Timestamp.now().date() + pd.to_timedelta(1, 'd'))
     start = pd.to_datetime('20210101')
-    _main_gml(dryrun = args.dry, first = args.first, verbose = args.verbose, start = start, end = end)
+    _main_gml(#dryrun = args.dry, 
+              first = args.first, verbose = args.verbose, start = start, end = end)
     # auto = prolab.Automation(retrieval, product_name='scrape_hrrr')
     # auto.log()
     

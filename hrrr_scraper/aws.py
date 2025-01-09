@@ -73,7 +73,10 @@ class HrrrScraperAWSDaily(object):
         return self._wp
 
 
-    def process(self, no_of_cpu=3, verbose = False):
+    def process(self, no_of_cpu=3, verbose = False, what2return = 'None'):
+        w2ropts = ['None', 'firstpp']
+        assert (what2return in w2ropts), f'kwarg what2return encountered an unknown value ({what2return}). Chose one of {w2ropts}'
+        
         for idx, hsdrow in self.workplan.iterrows():
             if verbose:
                 print(f'starting: {hsdrow}')
@@ -94,12 +97,14 @@ class HrrrScraperAWSDaily(object):
                                            max_forcast_interval=self.max_forcast_interval,
                                            reporter = self.reporter
                                         )
-
+            if what2return == 'firstpp':
+                return pp
+            
             pp.process(no_of_cpu=no_of_cpu, verbose=verbose)
 
-            if pp.workplan.cycle_datetime.max().date() < _pd.Timestamp.utcnow().date():
+            if pp.alltasks.cycle_datetime.max().date() < _pd.Timestamp.utcnow().date():
                 try:
-                    ds = _xr.open_mfdataset(pp.workplan.path2file)
+                    ds = _xr.open_mfdataset(pp.alltasks.path2file)
                     p2fo = hsdrow.path2file_concat
                     ds['datetime'].encoding.update({'units': 'seconds since 2024-10-16'})
                     ds['argmin_x'].encoding.update({'dtype': 'float32'})
